@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Archestra — Plans, visualized.</title>
+<meta name="description" content="Archestra produces 2D architectural plans and 3D visualizations for new builds, additions, and renovations across Texas and New York." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="light"] {
+    --bg: #ffffff;
+    --bg-2: #f5f5f7;
+    --bg-3: #ebebed;
+    --ink: #1d1d1f;
+    --ink-2: #424245;
+    --muted: #86868b;
+    --line: rgba(0, 0, 0, 0.08);
+    --line-2: rgba(0, 0, 0, 0.04);
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --card: #fafafa;
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #000000;
+    --bg-2: #0a0a0b;
+    --bg-3: #1c1c1e;
+    --ink: #f5f5f7;
+    --ink-2: #c7c7cc;
+    --muted: #86868b;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-2: rgba(255, 255, 255, 0.05);
+    --accent: #2997ff;
+    --accent-hover: #4ba5ff;
+    --card: #1c1c1e;
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.47;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* =================== NAV =================== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--line-2);
+    padding: 0 2rem;
+    height: 52px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: -0.015em;
+  }
+
+  .logo-mark {
+    width: 22px; height: 22px;
+    display: grid;
+    place-items: center;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.2rem;
+    justify-self: center;
+  }
+
+  .nav-links a {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-right { display: flex; align-items: center; gap: 0.6rem; }
+
+  .theme-toggle {
+    width: 28px; height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  .theme-toggle:hover { background: var(--bg-2); color: var(--ink); }
+  .theme-toggle svg { width: 15px; height: 15px; }
+  .theme-toggle .sun { display: none; }
+  [data-theme="dark"] .theme-toggle .sun { display: block; }
+  [data-theme="dark"] .theme-toggle .moon { display: none; }
+
+  /* =================== BUTTONS =================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.8rem 1.6rem;
+    border-radius: 980px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s ease;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-hover); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .btn-ghost:hover { color: var(--accent-hover); gap: 0.5rem; }
+  .btn-ghost::after {
+    content: '›';
+    font-size: 1.1em;
+    transition: transform 0.2s;
+    line-height: 0.5;
+  }
+  .btn-ghost:hover::after { transform: translateX(2px); }
+
+  .btn-dark {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .btn-dark:hover { opacity: 0.85; }
+
+  /* =================== SECTIONS =================== */
+  section { padding: 120px 24px; position: relative; }
+
+  .container { max-width: 1120px; margin: 0 auto; }
+  .container-wide { max-width: 1400px; margin: 0 auto; }
+
+  /* =================== HERO =================== */
+  .hero {
+    padding: 120px 24px 80px;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    color: var(--ink);
+    max-width: 900px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero .subhead {
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink-2);
+    line-height: 1.3;
+    max-width: 680px;
+    margin-bottom: 2.2rem;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* =================== TRANSFORM SCENE =================== */
+  /* The 4-stage scroll-driven transformation */
+  .transform-scene {
+    padding: 80px 24px 120px;
+    background: var(--bg);
+    position: relative;
+  }
+
+  .transform-track {
+    max-width: 1240px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .transform-stage {
+    max-width: 1120px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: var(--bg-2);
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stage-canvas {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 3rem;
+  }
+
+  .stage-canvas svg {
+    width: 100%;
+    height: 100%;
+    max-width: 900px;
+    max-height: 540px;
+  }
+
+  /* Each stage fades/transforms between with scroll */
+  .stage-frame {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 3rem;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .stage-frame.active {
+    opacity: 1;
+  }
+
+  .stage-label {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 3;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .stage-label .badge {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .stage-step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .step-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .step-btn::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background 0.25s;
+  }
+
+  .step-btn:hover { border-color: var(--ink-2); color: var(--ink); }
+
+  .step-btn.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  .step-btn.active::before { background: var(--accent); }
+
+  .transform-caption {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    color: var(--ink-2);
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 3rem;
+    transition: opacity 0.3s;
+  }
+
+  .transform-caption strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* =================== SECTION HEADINGS =================== */
+  .section-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .section-eyebrow {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    font-size: 1.15rem;
+    color: var(--ink-2);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  /* =================== FEATURE TILES =================== */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .tile {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.4s ease;
+  }
+
+  .tile:hover { transform: translateY(-4px); }
+
+  .tile.wide {
+    aspect-ratio: auto;
+    grid-column: span 2;
+    min-height: 500px;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .tile-content { max-width: 440px; }
+
+  .tile-eyebrow {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+
+  .tile h3 {
+    font-size: clamp(1.7rem, 2.5vw, 2.3rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+
+  .tile p {
+    font-size: 1.05rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin-bottom: 1.5rem;
+    max-width: 380px;
+  }
+
+  .tile-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: gap 0.2s;
+  }
+
+  .tile-link::after { content: '›'; font-size: 1.15em; line-height: 0.5; }
+
+  .tile-link:hover { gap: 0.5rem; }
+
+  .tile-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 1;
+    color: var(--ink);
+  }
+
+  .tile-visual svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .tile.wide .tile-visual { align-self: stretch; }
+
+  /* =================== STATS STRIP =================== */
+  .stats-strip {
+    padding: 80px 24px;
+    background: var(--bg-2);
+    border-top: 1px solid var(--line-2);
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .stats-strip-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-num .unit {
+    font-size: 0.55em;
+    color: var(--muted);
+    font-weight: 500;
+    margin-left: 0.1em;
+  }
+
+  .stat-lbl {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 160px;
+    margin: 0 auto;
+    line-height: 1.35;
+  }
+
+  /* =================== PROCESS TIMELINE =================== */
+  .process-timeline {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    background: var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .phase {
+    background: var(--bg);
+    padding: 32px 24px;
+    transition: background 0.3s;
+  }
+
+  .phase:hover { background: var(--bg-2); }
+
+  .phase-num {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  .phase h4 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .phase p {
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin-bottom: 1rem;
+  }
+
+  .phase-dur {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 500;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* =================== WORK SHOWCASE =================== */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .project {
+    background: var(--card);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+    aspect-ratio: 4 / 5;
+  }
+
+  .project:hover { transform: translateY(-4px); }
+
+  .project.wide {
+    grid-column: span 2;
+    aspect-ratio: 21 / 9;
+    flex-direction: row;
+  }
+
+  .project-visual {
+    flex: 1;
+    position: relative;
+    background: var(--bg-2);
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    overflow: hidden;
+    color: var(--ink);
+  }
+
+  .project-visual svg {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+  }
+
+  .project.wide .project-visual { min-width: 55%; }
+  .project.wide .project-body { max-width: 45%; }
+
+  .project-body {
+    padding: 2rem 2.5rem 2.5rem;
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+
+  .project h3 {
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+
+  .project .loc {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .project .desc {
+    color: var(--ink-2);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  /* =================== TESTIMONIALS =================== */
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .quote {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quote-text {
+    font-size: 1.15rem;
+    color: var(--ink);
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+    margin-bottom: 2rem;
+    flex: 1;
+    font-weight: 400;
+  }
+
+  .quote-author { padding-top: 1.5rem; border-top: 1px solid var(--line); }
+
+  .quote-author .name { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.15rem; }
+
+  .quote-author .role { color: var(--muted); font-size: 0.88rem; }
+
+  /* =================== CTA HERO =================== */
+  .cta-hero {
+    padding: 140px 24px;
+    text-align: center;
+    background: var(--bg-2);
+  }
+
+  .cta-hero h2 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-hero p {
+    font-size: 1.25rem;
+    color: var(--ink-2);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    letter-spacing: -0.015em;
+    line-height: 1.4;
+  }
+
+  .cta-ctas { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+
+  /* =================== INQUIRY WIZARD =================== */
+  .inquiry { padding: 120px 24px; }
+
+  .inquiry-card {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 28px;
+    padding: 3rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .wizard-progress {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 2rem;
+  }
+
+  .wizard-dot {
+    flex: 1;
+    height: 3px;
+    background: var(--line);
+    border-radius: 100px;
+    transition: background 0.3s;
+  }
+
+  .wizard-dot.active { background: var(--accent); }
+  .wizard-dot.complete { background: var(--ink); }
+
+  .wizard-step-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+
+  .wizard-question {
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 1.8rem;
+    color: var(--ink);
+  }
+
+  .wizard-question small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; animation: stepIn 0.4s ease; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .option-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--ink);
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  [data-theme="dark"] .option-card { background: var(--bg-3); }
+
+  .option-card:hover { border-color: var(--ink-2); }
+
+  .option-card.selected {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .option-card svg { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; }
+
+  .option-card strong { display: block; font-weight: 600; font-size: 0.95rem; }
+
+  .option-card small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+
+  .field-group { display: flex; flex-direction: column; gap: 1rem; }
+
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .field label {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+
+  .field input, .field textarea {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-family: inherit;
+    font-size: 0.98rem;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  [data-theme="dark"] .field input, [data-theme="dark"] .field textarea { background: var(--bg-3); }
+
+  .field input:focus, .field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+  .field textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+
+  .wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.8rem;
+  }
+
+  .wizard-back {
+    background: transparent;
+    border: none;
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+  }
+
+  .wizard-back:hover { color: var(--ink); }
+  .wizard-back:disabled { opacity: 0; pointer-events: none; }
+
+  .wizard-next {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.85rem 1.6rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 980px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .wizard-next:hover:not(:disabled) { background: var(--accent-hover); }
+  .wizard-next:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .wizard-success { display: none; text-align: center; padding: 1rem 0; }
+  .wizard-success.active { display: block; animation: stepIn 0.4s ease; }
+
+  .success-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 1.2rem;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+  .success-icon svg { width: 32px; height: 32px; }
+
+  .wizard-success h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+  }
+
+  .wizard-success p {
+    color: var(--ink-2);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* =================== FOOTER =================== */
+  footer {
+    background: var(--bg-2);
+    padding: 40px 24px 24px;
+    border-top: 1px solid var(--line-2);
+    font-size: 0.78rem;
+  }
+
+  .footer-top {
+    max-width: 1120px;
+    margin: 0 auto 32px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .footer-col.brand {
+    grid-column: span 2;
+  }
+
+  .footer-col .logo { margin-bottom: 1rem; }
+
+  .footer-col p {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  .footer-offices {
+    margin-top: 1.2rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  .footer-offices strong {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+    font-size: 0.82rem;
+  }
+
+  .footer-col h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+
+  .footer-col a {
+    display: block;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--muted);
+  }
+
+  .footer-bottom .legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+  /* =================== ANIMATIONS =================== */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  .hero-eyebrow, .hero h1, .hero .subhead, .hero-ctas {
+    opacity: 0;
+    animation: heroIn 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .hero-eyebrow { animation-delay: 0.05s; }
+  .hero h1 { animation-delay: 0.15s; }
+  .hero .subhead { animation-delay: 0.3s; }
+  .hero-ctas { animation-delay: 0.45s; }
+
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stage-specific animations (for SVG transformation) */
+  @keyframes drawIn {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .stage-frame[data-stage="1"].active svg path,
+  .stage-frame[data-stage="1"].active svg line,
+  .stage-frame[data-stage="1"].active svg rect {
+    stroke-dasharray: 1000;
+    animation: drawIn 1.2s ease-out forwards;
+  }
+
+  .stage-frame[data-stage="2"].active .wireframe-line {
+    stroke-dasharray: 600;
+    animation: drawIn 1s ease-out forwards;
+  }
+
+  /* =================== RESPONSIVE =================== */
+  @media (max-width: 900px) {
+    nav { padding: 0 1rem; gap: 1rem; grid-template-columns: auto 1fr; height: 48px; }
+    .nav-links { display: none; }
+
+    section { padding: 80px 20px; }
+
+    .hero { padding: 100px 20px 60px; min-height: auto; }
+
+    .transform-scene { padding: 60px 20px 80px; }
+    .transform-stage { aspect-ratio: 4 / 3; border-radius: 16px; }
+    .stage-canvas, .stage-frame { padding: 1.5rem; }
+
+    .tiles { grid-template-columns: 1fr; }
+    .tile { padding: 32px; aspect-ratio: auto; min-height: 420px; }
+    .tile.wide { grid-column: auto; flex-direction: column; gap: 1.5rem; min-height: 500px; }
+    .tile.wide .tile-visual { width: 100%; }
+
+    .stats-strip-inner { grid-template-columns: 1fr 1fr; gap: 32px 16px; }
+
+    .process-timeline { grid-template-columns: 1fr; }
+
+    .work-grid { grid-template-columns: 1fr; }
+    .project { aspect-ratio: auto; }
+    .project.wide { grid-column: auto; flex-direction: column; aspect-ratio: auto; }
+    .project.wide .project-visual { min-width: 0; }
+    .project.wide .project-body { max-width: 100%; }
+    .project-body { padding: 1.5rem; }
+
+    .quotes { grid-template-columns: 1fr; }
+
+    .inquiry-card { padding: 2rem; border-radius: 20px; }
+    .option-grid { grid-template-columns: 1fr; }
+
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-col.brand { grid-column: span 2; }
+    .footer-offices { flex-direction: column; gap: 1rem; }
+  }
+
+  @media (max-width: 560px) {
+    .hero h1 { font-size: 2.6rem; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-col.brand { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 20 L11 3 L19 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M7 13 L15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    Archestra
+  </a>
+  <div class="nav-links">
+    <a href="#transform">How it works</a>
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#work">Work</a>
+    <a href="#clients">Clients</a>
+    <a href="#inquire">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-eyebrow">Architecture, from the first line.</div>
+  <h1>Plans, visualized.</h1>
+  <p class="subhead">From measured 2D drawings to photoreal 3D renders — and finally to the home itself.</p>
+  <div class="hero-ctas">
+    <a href="#inquire" class="btn btn-primary">Start your project</a>
+    <a href="#transform" class="btn btn-ghost">See how it works</a>
+  </div>
+</section>
+
+<!-- ============ TRANSFORM SCENE ============ -->
+<section id="transform" class="transform-scene">
+  <div class="section-head">
+    <div class="section-eyebrow">From drawing to doorway</div>
+    <h2 class="section-title">Watch an idea<br>become a home.</h2>
+    <p class="section-sub">Every project moves through four stages — from a single floor plan to a finished building. Scroll or tap through to see the transformation.</p>
+  </div>
+
+  <div class="transform-track">
+    <div class="transform-stage" id="stage">
+
+      <!-- STAGE 1: 2D Floor Plan -->
+      <div class="stage-frame active" data-stage="1">
+        <span class="stage-label"><span class="badge"></span>Stage 01 — 2D Floor Plan</span>
+        <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <!-- Outer wall -->
+          <rect x="150" y="120" width="600" height="300" stroke="currentColor" stroke-width="3"/>
+          <!-- Inner walls -->
+          <line x1="450" y1="120" x2="450" y2="270" stroke="currentColor" stroke-width="2"/>
+          <line x1="150" y1="270" x2="550" y2="270" stroke="currentColor" stroke-width="2"/>
+          <line x1="550" y1="270" x2="550" y2="420" stroke="currentColor" stroke-width="2"/>
+          <line x1="300" y1="270" x2="300" y2="420" stroke="currentColor" stroke-width="2"/>
+
+          <!-- Door openings -->
+          <line x1="450" y1="200" x2="450" y2="240" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <line x1="380" y1="270" x2="420" y2="270" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <line x1="300" y1="340" x2="300" y2="380" stroke="white" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- Door swings -->
+          <path d="M 450 200 A 40 40 0 0 1 490 240" stroke="currentColor" stroke-width="1" fill="none" opacity="0.4"/>
+          <path d="M 380 270 A 40 40 0 0 1 380 310" stroke="currentColor" stroke-width="1" fill="none" opacity="0.4"/>
+          <path d="M 300 340 A 40 40 0 0 0 260 380" stroke="currentColor" stroke-width="1" fill="none" opacity="0.4"/>
+
+          <!-- Windows (double lines) -->
+          <line x1="220" y1="118" x2="380" y2="118" stroke="currentColor" stroke-width="4"/>
+          <line x1="220" y1="122" x2="380" y2="122" stroke="white" stroke-width="2"/>
+          <line x1="520" y1="118" x2="700" y2="118" stroke="currentColor" stroke-width="4"/>
+          <line x1="520" y1="122" x2="700" y2="122" stroke="white" stroke-width="2"/>
+          <line x1="748" y1="180" x2="752" y2="180" stroke="currentColor" stroke-width="2"/>
+
+          <!-- Furniture hints -->
+          <rect x="190" y="170" width="100" height="50" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+          <rect x="340" y="170" width="50" height="80" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+          <circle cx="620" cy="190" r="25" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+          <rect x="580" y="230" width="100" height="30" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+          <rect x="180" y="310" width="90" height="90" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+          <rect x="350" y="300" width="170" height="40" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+          <rect x="590" y="310" width="130" height="70" stroke="currentColor" stroke-width="1" opacity="0.4" rx="4"/>
+
+          <!-- Dimensions -->
+          <g opacity="0.55">
+            <line x1="150" y1="95" x2="750" y2="95" stroke="currentColor" stroke-width="0.8"/>
+            <line x1="150" y1="88" x2="150" y2="102" stroke="currentColor" stroke-width="0.8"/>
+            <line x1="750" y1="88" x2="750" y2="102" stroke="currentColor" stroke-width="0.8"/>
+            <rect x="420" y="82" width="60" height="16" fill="var(--bg-2, #f5f5f7)"/>
+            <text x="450" y="94" text-anchor="middle" font-family="Inter" font-size="11" fill="currentColor" font-weight="500">60′–0″</text>
+
+            <line x1="775" y1="120" x2="775" y2="420" stroke="currentColor" stroke-width="0.8"/>
+            <line x1="768" y1="120" x2="782" y2="120" stroke="currentColor" stroke-width="0.8"/>
+            <line x1="768" y1="420" x2="782" y2="420" stroke="currentColor" stroke-width="0.8"/>
+            <rect x="760" y="262" width="30" height="16" fill="var(--bg-2, #f5f5f7)"/>
+            <text x="775" y="274" text-anchor="middle" font-family="Inter" font-size="11" fill="currentColor" font-weight="500">30′</text>
+          </g>
+
+          <!-- Room labels -->
+          <text x="300" y="250" text-anchor="middle" font-family="Inter" font-size="12" fill="currentColor" opacity="0.6" letter-spacing="2" font-weight="500">LIVING</text>
+          <text x="625" y="250" text-anchor="middle" font-family="Inter" font-size="12" fill="currentColor" opacity="0.6" letter-spacing="2" font-weight="500">KITCHEN</text>
+          <text x="225" y="400" text-anchor="middle" font-family="Inter" font-size="11" fill="currentColor" opacity="0.6" letter-spacing="2" font-weight="500">BED</text>
+          <text x="425" y="400" text-anchor="middle" font-family="Inter" font-size="11" fill="currentColor" opacity="0.6" letter-spacing="2" font-weight="500">BATH</text>
+          <text x="650" y="400" text-anchor="middle" font-family="Inter" font-size="11" fill="currentColor" opacity="0.6" letter-spacing="2" font-weight="500">OFFICE</text>
+
+          <!-- North arrow -->
+          <g transform="translate(100, 480)">
+            <circle cx="0" cy="0" r="18" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+            <path d="M 0 -12 L -5 2 L 0 -2 L 5 2 Z" fill="currentColor" opacity="0.7"/>
+            <text x="0" y="25" text-anchor="middle" font-family="Inter" font-size="9" fill="currentColor" opacity="0.5" font-weight="500">N</text>
+          </g>
+
+          <!-- Scale -->
+          <text x="820" y="492" text-anchor="end" font-family="Inter" font-size="10" fill="currentColor" opacity="0.5" letter-spacing="1.5" font-weight="500">SCALE 1/4″ = 1′-0″</text>
+        </svg>
+      </div>
+
+      <!-- STAGE 2: 3D Wireframe -->
+      <div class="stage-frame" data-stage="2">
+        <span class="stage-label"><span class="badge"></span>Stage 02 — 3D Wireframe</span>
+        <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <!-- Isometric wireframe house -->
+          <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="wireframe-group">
+
+            <!-- Ground grid -->
+            <g opacity="0.25" stroke-width="0.6">
+              <path d="M 50 450 L 450 350 L 850 450 L 450 540"/>
+              <path d="M 150 425 L 550 325 M 250 400 L 650 300 M 350 375 L 750 275"/>
+              <path d="M 550 545 L 150 445 M 650 540 L 250 440 M 750 520 L 350 420"/>
+            </g>
+
+            <!-- House base (isometric box) -->
+            <!-- Bottom plane -->
+            <path d="M 260 410 L 540 340 L 800 430 L 520 500 Z" class="wireframe-line"/>
+            <!-- Top plane -->
+            <path d="M 260 280 L 540 210 L 800 300 L 520 370 Z" class="wireframe-line"/>
+            <!-- Vertical edges -->
+            <line x1="260" y1="410" x2="260" y2="280" class="wireframe-line"/>
+            <line x1="540" y1="340" x2="540" y2="210" class="wireframe-line"/>
+            <line x1="800" y1="430" x2="800" y2="300" class="wireframe-line"/>
+            <line x1="520" y1="500" x2="520" y2="370" class="wireframe-line"/>
+
+            <!-- Interior wall lines (following floor plan) -->
+            <line x1="430" y1="375" x2="430" y2="245" opacity="0.5" class="wireframe-line"/>
+            <line x1="260" y1="345" x2="540" y2="275" opacity="0.5" class="wireframe-line"/>
+
+            <!-- Roof -->
+            <path d="M 260 280 L 390 215 L 670 235 L 800 300" class="wireframe-line"/>
+            <path d="M 540 210 L 670 235" opacity="0.5" class="wireframe-line"/>
+            <line x1="390" y1="215" x2="540" y2="210" opacity="0.5" class="wireframe-line"/>
+
+            <!-- Door opening (front face) -->
+            <path d="M 440 460 L 440 395 L 480 380 L 480 445 Z" stroke-width="1.4" class="wireframe-line"/>
+
+            <!-- Windows (front face) -->
+            <path d="M 300 435 L 300 370 L 360 355 L 360 420 Z" stroke-width="1.4" class="wireframe-line"/>
+            <line x1="330" y1="362" x2="330" y2="427" stroke-width="0.8" opacity="0.5" class="wireframe-line"/>
+            <path d="M 560 400 L 560 335 L 640 355 L 640 420 Z" stroke-width="1.4" class="wireframe-line"/>
+            <line x1="600" y1="345" x2="600" y2="410" stroke-width="0.8" opacity="0.5" class="wireframe-line"/>
+
+            <!-- Side face windows -->
+            <path d="M 670 430 L 670 370 L 720 385 L 720 445 Z" stroke-width="1.4" opacity="0.8" class="wireframe-line"/>
+          </g>
+
+          <!-- Grid floor markings -->
+          <g opacity="0.18" stroke="currentColor" stroke-width="0.4">
+            <path d="M 20 500 L 880 500"/>
+            <path d="M 20 460 L 880 460"/>
+          </g>
+
+          <!-- Axis indicators -->
+          <g transform="translate(80, 470)" font-family="Inter" font-size="9" font-weight="500" fill="currentColor" opacity="0.5">
+            <line x1="0" y1="0" x2="30" y2="0" stroke="currentColor" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-30" stroke="currentColor" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-18" y2="12" stroke="currentColor" stroke-width="1"/>
+            <text x="34" y="4">X</text>
+            <text x="-3" y="-34">Z</text>
+            <text x="-24" y="20">Y</text>
+          </g>
+
+          <text x="820" y="492" text-anchor="end" font-family="Inter" font-size="10" fill="currentColor" opacity="0.5" letter-spacing="1.5" font-weight="500">WIREFRAME MODEL</text>
+        </svg>
+      </div>
+
+      <!-- STAGE 3: 3D Rendered -->
+      <div class="stage-frame" data-stage="3">
+        <span class="stage-label"><span class="badge"></span>Stage 03 — 3D Rendered</span>
+        <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#87a8c4" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#d9e3ec" stop-opacity="0.3"/>
+            </linearGradient>
+            <linearGradient id="ground3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#a8a89c" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#7a7a70" stop-opacity="0.4"/>
+            </linearGradient>
+            <linearGradient id="front3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0ebe0" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#d6cfbf" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="side3" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#b8b0a0" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#8a8272" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="roof3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3a3a3a" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#2a2a2a" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="window3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5a6d85" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#3d4a5e" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Sky -->
+          <rect x="0" y="0" width="900" height="360" fill="url(#sky3)"/>
+          <!-- Sun glow -->
+          <circle cx="720" cy="130" r="45" fill="#fff5d6" opacity="0.7"/>
+          <circle cx="720" cy="130" r="28" fill="#fffae0" opacity="0.9"/>
+
+          <!-- Distant trees -->
+          <g opacity="0.25">
+            <circle cx="120" cy="335" r="30" fill="#4a5a4a"/>
+            <circle cx="180" cy="345" r="22" fill="#4a5a4a"/>
+            <circle cx="820" cy="335" r="28" fill="#4a5a4a"/>
+          </g>
+
+          <!-- Ground -->
+          <rect x="0" y="360" width="900" height="180" fill="url(#ground3)"/>
+
+          <!-- House shadows on ground -->
+          <ellipse cx="510" cy="510" rx="280" ry="18" fill="#000" opacity="0.2"/>
+
+          <!-- House body -->
+          <!-- Right side face -->
+          <path d="M 540 340 L 800 430 L 800 300 L 540 210 Z" fill="url(#side3)"/>
+          <!-- Front face -->
+          <path d="M 260 410 L 540 340 L 540 210 L 260 280 Z" fill="url(#front3)"/>
+          <!-- Roof -->
+          <path d="M 260 280 L 390 215 L 670 235 L 800 300 L 540 210 Z" fill="url(#roof3)"/>
+          <path d="M 390 215 L 670 235 L 540 210 Z" fill="#444" opacity="0.6"/>
+
+          <!-- Door -->
+          <path d="M 440 460 L 440 395 L 480 380 L 480 445 Z" fill="#3a2a1a"/>
+          <circle cx="473" cy="422" r="1.5" fill="#d4a84b"/>
+
+          <!-- Front windows -->
+          <path d="M 300 435 L 300 370 L 360 355 L 360 420 Z" fill="url(#window3)"/>
+          <path d="M 300 435 L 300 370 L 360 355 L 360 420 Z" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="330" y1="362" x2="330" y2="427" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="300" y1="402" x2="360" y2="387" stroke="#2a2a2a" stroke-width="1"/>
+
+          <path d="M 560 400 L 560 335 L 640 355 L 640 420 Z" fill="url(#window3)"/>
+          <path d="M 560 400 L 560 335 L 640 355 L 640 420 Z" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="600" y1="345" x2="600" y2="410" stroke="#2a2a2a" stroke-width="1.2"/>
+
+          <!-- Side window -->
+          <path d="M 670 430 L 670 370 L 720 385 L 720 445 Z" fill="url(#window3)" opacity="0.85"/>
+          <path d="M 670 430 L 670 370 L 720 385 L 720 445 Z" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+          <!-- Landscape: tree near house -->
+          <ellipse cx="220" cy="425" rx="6" ry="20" fill="#3a3a2a"/>
+          <circle cx="220" cy="400" r="24" fill="#5a6e4a"/>
+          <circle cx="210" cy="392" r="14" fill="#6e8258"/>
+          <circle cx="232" cy="398" r="12" fill="#6e8258"/>
+
+          <!-- Path to door -->
+          <path d="M 440 470 L 420 530 L 480 530 L 480 460 Z" fill="#c4b89e" opacity="0.6"/>
+
+          <!-- Foreground bushes -->
+          <circle cx="300" cy="460" r="14" fill="#4a5e3a" opacity="0.85"/>
+          <circle cx="320" cy="465" r="10" fill="#546a42" opacity="0.85"/>
+
+          <text x="820" y="492" text-anchor="end" font-family="Inter" font-size="10" fill="currentColor" opacity="0.5" letter-spacing="1.5" font-weight="500">RENDERED VIEW</text>
+        </svg>
+      </div>
+
+      <!-- STAGE 4: Built / Photo-style -->
+      <div class="stage-frame" data-stage="4">
+        <span class="stage-label"><span class="badge"></span>Stage 04 — Built</span>
+        <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f4d4a8"/>
+              <stop offset="40%" stop-color="#e5b898"/>
+              <stop offset="100%" stop-color="#c89088"/>
+            </linearGradient>
+            <linearGradient id="ground4" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8a9575"/>
+              <stop offset="100%" stop-color="#5a6548"/>
+            </linearGradient>
+            <linearGradient id="front4" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8f2e4"/>
+              <stop offset="100%" stop-color="#e8dec8"/>
+            </linearGradient>
+            <linearGradient id="side4" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#d4ccb6"/>
+              <stop offset="100%" stop-color="#928866"/>
+            </linearGradient>
+            <linearGradient id="roof4" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3a3838"/>
+              <stop offset="100%" stop-color="#1a1818"/>
+            </linearGradient>
+            <radialGradient id="glow4" cx="0.5" cy="0.4" r="0.6">
+              <stop offset="0%" stop-color="#ffdc9a" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#ffb878" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="windowGlow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffd685" stop-opacity="0.98"/>
+              <stop offset="100%" stop-color="#ff9a4c" stop-opacity="0.95"/>
+            </linearGradient>
+            <filter id="blur4">
+              <feGaussianBlur stdDeviation="2"/>
+            </filter>
+          </defs>
+
+          <!-- Sunset sky -->
+          <rect x="0" y="0" width="900" height="360" fill="url(#sky4)"/>
+          <!-- Sun glow -->
+          <circle cx="700" cy="180" r="180" fill="url(#glow4)" filter="url(#blur4)"/>
+          <circle cx="700" cy="180" r="38" fill="#fff2c4" opacity="0.9"/>
+
+          <!-- Distant mountains/treeline -->
+          <path d="M 0 320 L 150 280 L 280 300 L 420 270 L 580 295 L 750 275 L 900 305 L 900 360 L 0 360 Z" fill="#6a5e52" opacity="0.5"/>
+          <path d="M 0 340 L 120 320 L 250 335 L 390 315 L 560 335 L 720 318 L 900 340 L 900 360 L 0 360 Z" fill="#4a4238" opacity="0.6"/>
+
+          <!-- Grass -->
+          <rect x="0" y="355" width="900" height="185" fill="url(#ground4)"/>
+
+          <!-- Ground textures -->
+          <g opacity="0.3">
+            <path d="M 0 430 Q 200 420, 400 435 T 900 430" stroke="#4a5540" stroke-width="1" fill="none"/>
+            <path d="M 0 465 Q 250 460, 500 470 T 900 465" stroke="#3a4530" stroke-width="1" fill="none"/>
+          </g>
+
+          <!-- Shadow under house -->
+          <ellipse cx="510" cy="505" rx="290" ry="16" fill="#000" opacity="0.35"/>
+
+          <!-- Path -->
+          <path d="M 460 465 Q 470 500 440 540" stroke="#c4a68e" stroke-width="18" fill="none" opacity="0.85" stroke-linecap="round"/>
+
+          <!-- House body -->
+          <path d="M 540 340 L 800 430 L 800 300 L 540 210 Z" fill="url(#side4)"/>
+          <path d="M 260 410 L 540 340 L 540 210 L 260 280 Z" fill="url(#front4)"/>
+
+          <!-- Roof with subtle tile lines -->
+          <path d="M 260 280 L 390 215 L 670 235 L 800 300 L 540 210 Z" fill="url(#roof4)"/>
+          <path d="M 390 215 L 670 235 L 540 210 Z" fill="#1a1818" opacity="0.8"/>
+          <!-- Roof tile lines -->
+          <g stroke="#0a0a0a" stroke-width="0.4" opacity="0.5" fill="none">
+            <path d="M 290 270 L 420 210"/>
+            <path d="M 330 258 L 460 205"/>
+            <path d="M 380 245 L 510 205"/>
+          </g>
+
+          <!-- Door (lit warmly) -->
+          <path d="M 440 460 L 440 395 L 480 380 L 480 445 Z" fill="#2a1a0e"/>
+          <path d="M 442 455 L 442 398 L 478 383 L 478 442 Z" fill="#5a3a1e" opacity="0.6"/>
+          <circle cx="472" cy="422" r="1.8" fill="#e8c878"/>
+
+          <!-- Warm porch light -->
+          <circle cx="486" cy="390" r="18" fill="#ffd68e" opacity="0.4"/>
+
+          <!-- Front windows — glowing at golden hour -->
+          <path d="M 300 435 L 300 370 L 360 355 L 360 420 Z" fill="url(#windowGlow)"/>
+          <path d="M 300 435 L 300 370 L 360 355 L 360 420 Z" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <line x1="330" y1="362" x2="330" y2="427" stroke="#1a1a1a" stroke-width="1.2"/>
+          <line x1="300" y1="400" x2="360" y2="385" stroke="#1a1a1a" stroke-width="1"/>
+          <!-- Window glow halo -->
+          <ellipse cx="330" cy="395" rx="60" ry="35" fill="#ffc878" opacity="0.12"/>
+
+          <path d="M 560 400 L 560 335 L 640 355 L 640 420 Z" fill="url(#windowGlow)"/>
+          <path d="M 560 400 L 560 335 L 640 355 L 640 420 Z" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <line x1="600" y1="345" x2="600" y2="410" stroke="#1a1a1a" stroke-width="1.2"/>
+          <ellipse cx="600" cy="378" rx="60" ry="35" fill="#ffc878" opacity="0.12"/>
+
+          <!-- Side window -->
+          <path d="M 670 430 L 670 370 L 720 385 L 720 445 Z" fill="url(#windowGlow)" opacity="0.85"/>
+          <path d="M 670 430 L 670 370 L 720 385 L 720 445 Z" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+
+          <!-- Large foreground tree -->
+          <ellipse cx="175" cy="440" rx="8" ry="28" fill="#2a2218"/>
+          <circle cx="175" cy="405" r="38" fill="#4a5a3a"/>
+          <circle cx="155" cy="392" r="22" fill="#5a6e48"/>
+          <circle cx="195" cy="400" r="20" fill="#5a6e48"/>
+          <circle cx="180" cy="375" r="18" fill="#687c54"/>
+
+          <!-- Foreground landscaping -->
+          <ellipse cx="260" cy="475" rx="30" ry="12" fill="#4a5a3a" opacity="0.9"/>
+          <ellipse cx="370" cy="490" rx="25" ry="10" fill="#3a4a2e" opacity="0.9"/>
+
+          <!-- Birds -->
+          <g opacity="0.7" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 200 110 Q 205 105 210 110 Q 215 105 220 110"/>
+            <path d="M 250 130 Q 253 127 256 130 Q 259 127 262 130"/>
+          </g>
+
+          <text x="820" y="492" text-anchor="end" font-family="Inter" font-size="10" fill="#fff" opacity="0.8" letter-spacing="1.5" font-weight="500">COMPLETED 2025</text>
+        </svg>
+      </div>
+
+    </div>
+
+    <!-- Stage indicator buttons -->
+    <div class="stage-step-indicator">
+      <button class="step-btn active" data-stage-btn="1">01 · Plan</button>
+      <button class="step-btn" data-stage-btn="2">02 · Wireframe</button>
+      <button class="step-btn" data-stage-btn="3">03 · Render</button>
+      <button class="step-btn" data-stage-btn="4">04 · Built</button>
+    </div>
+
+    <p class="transform-caption" id="transformCaption">
+      <strong>Stage 01 — 2D Floor Plan.</strong> Every project begins with measured, permit-ready plans. Walls, doors, dimensions, and rooms — drawn to scale.
+    </p>
+  </div>
+</section>
+
+<!-- ============ SERVICES TILES ============ -->
+<section id="services">
+  <div class="section-head">
+    <div class="section-eyebrow">Services</div>
+    <h2 class="section-title">Three deliverables.<br>One continuous practice.</h2>
+    <p class="section-sub">Everything you need to move from idea to site — from measured construction drawings to photoreal visualizations of the finished home.</p>
+  </div>
+
+  <div class="tiles">
+
+    <!-- Wide featured tile -->
+    <div class="tile wide fade-up">
+      <div class="tile-content">
+        <div class="tile-eyebrow">Most Popular · From $2,400</div>
+        <h3>2D construction plans<br>that builders trust.</h3>
+        <p>Complete, permit-ready drawing sets. Floor plans, elevations, sections, and construction details — drawn with the precision your builder and council both demand.</p>
+        <a href="#inquire" class="tile-link">Get a quote</a>
+      </div>
+      <div class="tile-visual">
+        <svg viewBox="0 0 400 320" fill="none">
+          <rect x="30" y="30" width="340" height="260" stroke="currentColor" stroke-width="2"/>
+          <line x1="200" y1="30" x2="200" y2="170" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="30" y1="170" x2="260" y2="170" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="260" y1="170" x2="260" y2="290" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="140" y1="170" x2="140" y2="290" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="200" y1="100" x2="200" y2="130" stroke="var(--card, #fafafa)" stroke-width="4"/>
+          <line x1="180" y1="170" x2="210" y2="170" stroke="var(--card, #fafafa)" stroke-width="4"/>
+          <line x1="140" y1="210" x2="140" y2="245" stroke="var(--card, #fafafa)" stroke-width="4"/>
+          <path d="M 200 100 A 30 30 0 0 1 230 130" stroke="currentColor" stroke-width="0.8" fill="none" opacity="0.4"/>
+          <rect x="55" y="70" width="70" height="40" stroke="currentColor" stroke-width="0.8" opacity="0.4" rx="3"/>
+          <circle cx="300" cy="100" r="20" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+          <rect x="60" y="220" width="70" height="55" stroke="currentColor" stroke-width="0.8" opacity="0.4" rx="3"/>
+          <rect x="170" y="210" width="75" height="25" stroke="currentColor" stroke-width="0.8" opacity="0.4" rx="3"/>
+          <line x1="30" y1="15" x2="370" y2="15" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="30" y1="10" x2="30" y2="20" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="370" y1="10" x2="370" y2="20" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 3D Renders tile -->
+    <div class="tile fade-up">
+      <div class="tile-eyebrow">From $850 / view</div>
+      <h3>Photoreal 3D renders.</h3>
+      <p>Walk through your home before it's built. Exterior and interior views rendered at production quality.</p>
+      <a href="#inquire" class="tile-link">Get a quote</a>
+      <div class="tile-visual" style="margin-top: 2rem;">
+        <svg viewBox="0 0 400 260" fill="none">
+          <defs>
+            <linearGradient id="tSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#87a8c4" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#d9e3ec" stop-opacity="0.2"/>
+            </linearGradient>
+            <linearGradient id="tFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0ebe0"/>
+              <stop offset="100%" stop-color="#c4bca8"/>
+            </linearGradient>
+            <linearGradient id="tSide" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#a8a090"/>
+              <stop offset="100%" stop-color="#706654"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="400" height="180" fill="url(#tSky)"/>
+          <rect x="0" y="180" width="400" height="80" fill="#8a9575" opacity="0.55"/>
+          <circle cx="320" cy="60" r="22" fill="#fff0c4" opacity="0.8"/>
+          <path d="M 240 180 L 360 220 L 360 155 L 240 115 Z" fill="url(#tSide)"/>
+          <path d="M 110 205 L 240 180 L 240 115 L 110 140 Z" fill="url(#tFront)"/>
+          <path d="M 110 140 L 180 105 L 300 122 L 360 155 L 240 115 Z" fill="#3a3a3a"/>
+          <rect x="130" y="150" width="30" height="35" fill="#5a6d85"/>
+          <rect x="190" y="145" width="30" height="35" fill="#5a6d85"/>
+          <path d="M 200 230 L 200 195 L 218 187 L 218 222 Z" fill="#2a1a0e"/>
+          <circle cx="60" cy="195" r="13" fill="#5a6e48"/>
+          <path d="M 60 215 L 60 200" stroke="#2a2218" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Design & Docs tile -->
+    <div class="tile fade-up">
+      <div class="tile-eyebrow">Full Service · From $6,500</div>
+      <h3>Design &amp; documentation.</h3>
+      <p>End-to-end residential design for new builds, additions, and renovations. Concept through permit.</p>
+      <a href="#inquire" class="tile-link">Get a quote</a>
+      <div class="tile-visual" style="margin-top: 2rem;">
+        <svg viewBox="0 0 400 260" fill="none">
+          <!-- Elevation style drawing -->
+          <path d="M 60 230 L 60 140 L 200 70 L 340 140 L 340 230 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M 60 140 L 340 140" stroke="currentColor" stroke-width="1"/>
+          <rect x="90" y="165" width="40" height="55" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.08"/>
+          <line x1="110" y1="165" x2="110" y2="220" stroke="currentColor" stroke-width="0.6"/>
+          <line x1="90" y1="192.5" x2="130" y2="192.5" stroke="currentColor" stroke-width="0.6"/>
+          <rect x="150" y="165" width="35" height="55" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.08"/>
+          <rect x="220" y="165" width="40" height="55" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.08"/>
+          <rect x="280" y="170" width="30" height="50" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.08"/>
+          <!-- Ground -->
+          <line x1="20" y1="230" x2="380" y2="230" stroke="currentColor" stroke-width="2"/>
+          <!-- Trees -->
+          <circle cx="35" cy="215" r="10" stroke="currentColor" stroke-width="0.8" fill="none"/>
+          <circle cx="365" cy="215" r="8" stroke="currentColor" stroke-width="0.8" fill="none"/>
+          <!-- Dimension line -->
+          <line x1="60" y1="250" x2="340" y2="250" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="60" y1="246" x2="60" y2="254" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="340" y1="246" x2="340" y2="254" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ STATS STRIP ============ -->
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div>
+      <div class="stat-num">210<span class="unit">+</span></div>
+      <div class="stat-lbl">Projects delivered since 2014</div>
+    </div>
+    <div>
+      <div class="stat-num">98<span class="unit">%</span></div>
+      <div class="stat-lbl">Permit approval, first submission</div>
+    </div>
+    <div>
+      <div class="stat-num">4–6<span class="unit">wks</span></div>
+      <div class="stat-lbl">Average turnaround</div>
+    </div>
+    <div>
+      <div class="stat-num">4.9<span class="unit">/5</span></div>
+      <div class="stat-lbl">Client satisfaction rating</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PROCESS ============ -->
+<section id="process">
+  <div class="section-head">
+    <div class="section-eyebrow">Process</div>
+    <h2 class="section-title">A clear path<br>from first call to keys.</h2>
+    <p class="section-sub">Five phases, fixed milestones, transparent communication. You'll always know exactly where your project stands.</p>
+  </div>
+
+  <div class="process-timeline">
+    <div class="phase fade-up">
+      <span class="phase-num">01</span>
+      <h4>Consult</h4>
+      <p>Free 20-minute call to review your site and scope.</p>
+      <div class="phase-dur">Week 1</div>
+    </div>
+    <div class="phase fade-up">
+      <span class="phase-num">02</span>
+      <h4>Concept</h4>
+      <p>Two or three initial design directions to review.</p>
+      <div class="phase-dur">Weeks 2–4</div>
+    </div>
+    <div class="phase fade-up">
+      <span class="phase-num">03</span>
+      <h4>Visualize</h4>
+      <p>The chosen direction rendered in photoreal 3D.</p>
+      <div class="phase-dur">Weeks 5–7</div>
+    </div>
+    <div class="phase fade-up">
+      <span class="phase-num">04</span>
+      <h4>Document</h4>
+      <p>Full 2D construction set — plans, elevations, sections.</p>
+      <div class="phase-dur">Weeks 8–14</div>
+    </div>
+    <div class="phase fade-up">
+      <span class="phase-num">05</span>
+      <h4>Deliver</h4>
+      <p>Permit submission and handoff to your builder.</p>
+      <div class="phase-dur">Week 15+</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section id="work">
+  <div class="section-head">
+    <div class="section-eyebrow">Portfolio</div>
+    <h2 class="section-title">Selected work.</h2>
+    <p class="section-sub">Recent 2D plans and 3D visualizations for homeowners, builders, and developers.</p>
+  </div>
+
+  <div class="work-grid">
+    <div class="project wide fade-up">
+      <div class="project-visual">
+        <svg viewBox="0 0 600 280" fill="none">
+          <defs>
+            <linearGradient id="wSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0d8b8"/>
+              <stop offset="100%" stop-color="#c8a898"/>
+            </linearGradient>
+            <linearGradient id="wFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8f2e4"/>
+              <stop offset="100%" stop-color="#d8cfb9"/>
+            </linearGradient>
+            <linearGradient id="wSide" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#b0a898"/>
+              <stop offset="100%" stop-color="#807658"/>
+            </linearGradient>
+            <linearGradient id="wGlow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffd685" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#ff9a4c" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="600" height="190" fill="url(#wSky)"/>
+          <circle cx="480" cy="80" r="30" fill="#fff2c4" opacity="0.9"/>
+          <rect x="0" y="190" width="600" height="90" fill="#7a8565"/>
+          <path d="M 0 170 L 130 150 L 250 165 L 380 148 L 500 162 L 600 155 L 600 195 L 0 195 Z" fill="#5a5042" opacity="0.55"/>
+          <!-- Hillside House -->
+          <path d="M 360 210 L 540 270 L 540 180 L 360 140 Z" fill="url(#wSide)"/>
+          <path d="M 170 245 L 360 210 L 360 140 L 170 170 Z" fill="url(#wFront)"/>
+          <path d="M 170 170 L 260 135 L 450 150 L 540 180 L 360 140 Z" fill="#2a2a2a"/>
+          <rect x="200" y="185" width="38" height="42" fill="url(#wGlow)"/>
+          <rect x="200" y="185" width="38" height="42" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+          <rect x="260" y="180" width="38" height="42" fill="url(#wGlow)"/>
+          <rect x="260" y="180" width="38" height="42" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+          <path d="M 320 240 L 320 205 L 344 198 L 344 232 Z" fill="#2a1a0e"/>
+          <circle cx="80" cy="220" r="20" fill="#4a5e3a"/>
+          <rect x="77" y="218" width="6" height="30" fill="#2a2218"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <div class="project-tag">3D Render · Keller, TX</div>
+        <h3>Hillside House</h3>
+        <p class="loc">New build, 2,400 sq ft · Delivered March 2025</p>
+        <p class="desc">Exterior and interior renders for a modern residence on a sloped site. Helped the clients decide on final material palette before breaking ground.</p>
+      </div>
+    </div>
+
+    <div class="project fade-up">
+      <div class="project-visual">
+        <svg viewBox="0 0 400 260" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="30" y="30" width="340" height="200"/>
+          <line x1="30" y1="115" x2="220" y2="115" stroke-width="1"/>
+          <line x1="150" y1="30" x2="150" y2="230" stroke-width="1"/>
+          <line x1="220" y1="30" x2="220" y2="230" stroke-width="1"/>
+          <line x1="290" y1="115" x2="290" y2="230" stroke-width="1"/>
+          <line x1="220" y1="170" x2="370" y2="170" stroke-width="1"/>
+          <line x1="150" y1="115" x2="180" y2="115" stroke="var(--card, #fafafa)" stroke-width="3.5"/>
+          <line x1="220" y1="130" x2="220" y2="160" stroke="var(--card, #fafafa)" stroke-width="3.5"/>
+          <path d="M 150 115 A 24 24 0 0 0 174 139" stroke-width="0.7" opacity="0.5" fill="none"/>
+          <circle cx="85" cy="75" r="10" stroke-width="0.7" opacity="0.5" fill="none"/>
+          <circle cx="320" cy="80" r="12" stroke-width="0.7" opacity="0.5" fill="none"/>
+          <rect x="240" y="190" width="35" height="20" stroke-width="0.7" opacity="0.5" rx="2"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <div class="project-tag">2D Plans · Fort Worth, TX</div>
+        <h3>Craftsman Addition</h3>
+        <p class="loc">Rear addition, 850 sq ft</p>
+        <p class="desc">Full permit-ready drawing set.</p>
+      </div>
+    </div>
+
+    <div class="project fade-up">
+      <div class="project-visual">
+        <svg viewBox="0 0 400 260" fill="none">
+          <path d="M 50 210 L 50 140 L 80 140 L 80 115 L 320 115 L 320 140 L 350 140 L 350 210" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M 75 115 L 200 70 L 325 115" stroke="currentColor" stroke-width="1.4" fill="none"/>
+          <path d="M 100 145 L 100 200 M 140 145 L 140 200 M 240 145 L 240 200 M 280 145 L 280 200" stroke="currentColor" stroke-width="0.8"/>
+          <path d="M 98 145 L 102 145 M 138 145 L 142 145 M 238 145 L 242 145 M 278 145 L 282 145" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M 96 200 L 104 200 M 136 200 L 144 200 M 236 200 L 244 200 M 276 200 L 284 200" stroke="currentColor" stroke-width="1.4"/>
+          <rect x="180" y="155" width="32" height="55" stroke="currentColor" stroke-width="1"/>
+          <line x1="20" y1="210" x2="380" y2="210" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="50" y1="225" x2="350" y2="225" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="50" y1="222" x2="50" y2="228" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="350" y1="222" x2="350" y2="228" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <div class="project-tag">Full Commission · Southlake, TX</div>
+        <h3>House at the Edge</h3>
+        <p class="loc">New build, 3,200 sq ft · In progress</p>
+        <p class="desc">Complete design through permit set.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="clients">
+  <div class="section-head">
+    <div class="section-eyebrow">Clients</div>
+    <h2 class="section-title">What people<br>say about us.</h2>
+  </div>
+
+  <div class="quotes">
+    <div class="quote fade-up">
+      <p class="quote-text">"Archestra delivered our permit set two weeks ahead of schedule. The 3D renders helped us settle three design decisions that would've cost us a fortune to change later."</p>
+      <div class="quote-author">
+        <div class="name">Sarah Chen</div>
+        <div class="role">Homeowner · Southlake, TX</div>
+      </div>
+    </div>
+
+    <div class="quote fade-up">
+      <p class="quote-text">"We've worked with dozens of architects. Archestra is the one firm that consistently sends documentation so clean our crews don't have to call with questions."</p>
+      <div class="quote-author">
+        <div class="name">Marcus Brady</div>
+        <div class="role">Project Manager · Meridian Homes</div>
+      </div>
+    </div>
+
+    <div class="quote fade-up">
+      <p class="quote-text">"Thoughtful, responsive, and unusually good at listening. They turned a complicated heritage renovation into a set of plans we could actually build from."</p>
+      <div class="quote-author">
+        <div class="name">David &amp; Priya Okonkwo</div>
+        <div class="role">Homeowners · Brooklyn, NY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA HERO ============ -->
+<section class="cta-hero">
+  <h2>Ready to draw<br>your first line?</h2>
+  <p>Get a free consultation and rough estimate within one business day. No obligation.</p>
+  <div class="cta-ctas">
+    <a href="#inquire" class="btn btn-primary">Start your project</a>
+    <a href="tel:+18175550184" class="btn btn-ghost">Or call (817) 555-0184</a>
+  </div>
+</section>
+
+<!-- ============ INQUIRY ============ -->
+<section id="inquire" class="inquiry">
+  <div class="section-head">
+    <div class="section-eyebrow">Get Started</div>
+    <h2 class="section-title">Tell us about<br>your project.</h2>
+    <p class="section-sub">Four quick questions and we'll reply within one business day.</p>
+  </div>
+
+  <form class="inquiry-card" id="wizard" onsubmit="return false;">
+    <div class="wizard-progress">
+      <div class="wizard-dot active" data-step="1"></div>
+      <div class="wizard-dot" data-step="2"></div>
+      <div class="wizard-dot" data-step="3"></div>
+      <div class="wizard-dot" data-step="4"></div>
+    </div>
+
+    <div class="wizard-step active" data-step="1">
+      <div class="wizard-step-label">Step 1 of 4</div>
+      <div class="wizard-question">What type of project are you planning?</div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="projectType" data-value="new-build">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12M9 21V12h6v9"/></svg>
+          <span><strong>New build</strong><small>Ground-up home</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="addition">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span><strong>Addition</strong><small>Extending a home</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="renovation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 21V9"/></svg>
+          <span><strong>Renovation</strong><small>Reshape existing</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="visuals-only">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+          <span><strong>Visuals only</strong><small>Plans or renders</small></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="2">
+      <div class="wizard-step-label">Step 2 of 4</div>
+      <div class="wizard-question">Which services do you need?<small>Select all that apply.</small></div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="services" data-value="2d-plans" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 3v18"/></svg>
+          <span><strong>2D plans</strong><small>Construction drawings</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="3d-renders" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span><strong>3D renders</strong><small>Photoreal visuals</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="permits" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M9 13h6M9 17h6"/></svg>
+          <span><strong>Permit docs</strong><small>Council-ready set</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="full-service" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span><strong>Full service</strong><small>Start to finish</small></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="3">
+      <div class="wizard-step-label">Step 3 of 4</div>
+      <div class="wizard-question">When would you like to start?</div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="timeline" data-value="asap">
+          <span><strong>As soon as possible</strong><small>Within 1 month</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="1-3-months">
+          <span><strong>1–3 months</strong><small>Planning ahead</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="3-6-months">
+          <span><strong>3–6 months</strong><small>Still researching</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="exploring">
+          <span><strong>Just exploring</strong><small>No firm date</small></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="4">
+      <div class="wizard-step-label">Step 4 of 4</div>
+      <div class="wizard-question">How can we reach you?</div>
+      <div class="field-group">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" placeholder="Jane Doe"/>
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="jane@example.com"/>
+        </div>
+        <div class="field">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" placeholder="(817) 555-0123"/>
+        </div>
+        <div class="field">
+          <label for="notes">Project details</label>
+          <textarea id="notes" placeholder="Site address, square footage, budget, or anything else..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-success" id="wizardSuccess">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h3>Request received.</h3>
+      <p>We'll reply within one business day with next steps and a time for your free consultation.</p>
+    </div>
+
+    <div class="wizard-nav" id="wizardNav">
+      <button type="button" class="wizard-back" id="wizardBack" disabled>Back</button>
+      <button type="button" class="wizard-next" id="wizardNext" disabled>Continue</button>
+    </div>
+  </form>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col brand">
+      <a href="#" class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 20 L11 3 L19 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M7 13 L15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        Archestra
+      </a>
+      <p>Architectural design studio producing 2D construction plans and 3D visualizations for new builds, additions, and renovations.</p>
+      <div class="footer-offices">
+        <div>
+          <strong>Texas</strong>
+          24 Burnside Ln<br>
+          N. Richland Hills, TX 76180<br>
+          (817) 555-0184
+        </div>
+        <div>
+          <strong>New York</strong>
+          318 Lafayette St, Ste 4<br>
+          New York, NY 10012<br>
+          (212) 555-0134
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="#services">2D Plans</a>
+      <a href="#services">3D Renders</a>
+      <a href="#services">Design &amp; Docs</a>
+      <a href="#services">Permits</a>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="#transform">How it works</a>
+      <a href="#process">Process</a>
+      <a href="#work">Work</a>
+      <a href="#clients">Clients</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="mailto:studio@archestra.co">studio@archestra.co</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Houzz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>Copyright © 2026 Archestra. All rights reserved.</div>
+    <div class="legal">
+      <span>TX Board of Architectural Examiners</span>
+      <span>NYSED Licensed</span>
+      <span>AIA Member</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // === THEME ===
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('archestra-theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    root.setAttribute('data-theme', 'dark');
+  }
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('archestra-theme', next);
+  });
+
+  // === FADE-UP ===
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // === TRANSFORM SCENE ===
+  const stageFrames = document.querySelectorAll('.stage-frame');
+  const stageBtns = document.querySelectorAll('.step-btn');
+  const captionEl = document.getElementById('transformCaption');
+
+  const captions = {
+    1: '<strong>Stage 01 — 2D Floor Plan.</strong> Every project begins with measured, permit-ready plans. Walls, doors, dimensions, and rooms — drawn to scale.',
+    2: '<strong>Stage 02 — 3D Wireframe.</strong> The plan lifts into three dimensions. A precise geometric model of every wall, window, roof, and opening.',
+    3: '<strong>Stage 03 — 3D Render.</strong> Light, material, and landscape come together. Photoreal visualizations let you walk through the home before it exists.',
+    4: '<strong>Stage 04 — Built.</strong> The drawings become a place. Handed to your builder, stamped by council, and made real on the site.'
+  };
+
+  let currentStage = 1;
+  let autoplayTimer = null;
+
+  function setStage(n) {
+    currentStage = n;
+    stageFrames.forEach(f => f.classList.toggle('active', parseInt(f.dataset.stage) === n));
+    stageBtns.forEach(b => b.classList.toggle('active', parseInt(b.dataset.stageBtn) === n));
+    captionEl.style.opacity = '0';
+    setTimeout(() => {
+      captionEl.innerHTML = captions[n];
+      captionEl.style.opacity = '1';
+    }, 200);
+  }
+
+  stageBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      stopAutoplay();
+      setStage(parseInt(btn.dataset.stageBtn));
+    });
+  });
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      const next = currentStage >= 4 ? 1 : currentStage + 1;
+      setStage(next);
+    }, 3500);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+  }
+
+  // Start autoplay only when transform section is visible
+  const transformSection = document.getElementById('transform');
+  const transformObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) startAutoplay();
+      else stopAutoplay();
+    });
+  }, { threshold: 0.3 });
+  transformObs.observe(transformSection);
+
+  // === WIZARD ===
+  const state = {
+    step: 1,
+    totalSteps: 4,
+    data: { projectType: null, services: [], timeline: null, name: '', email: '', phone: '', notes: '' }
+  };
+
+  const steps = document.querySelectorAll('.wizard-step');
+  const dots = document.querySelectorAll('.wizard-dot');
+  const backBtn = document.getElementById('wizardBack');
+  const nextBtn = document.getElementById('wizardNext');
+  const nav = document.getElementById('wizardNav');
+  const successPanel = document.getElementById('wizardSuccess');
+
+  function updateUI() {
+    steps.forEach(s => s.classList.toggle('active', parseInt(s.dataset.step) === state.step));
+    dots.forEach((d, i) => {
+      d.classList.remove('active', 'complete');
+      if (i + 1 < state.step) d.classList.add('complete');
+      else if (i + 1 === state.step) d.classList.add('active');
+    });
+    backBtn.disabled = state.step === 1;
+    nextBtn.textContent = state.step === state.totalSteps ? 'Submit request' : 'Continue';
+    validateStep();
+  }
+
+  function validateStep() {
+    let valid = false;
+    if (state.step === 1) valid = !!state.data.projectType;
+    if (state.step === 2) valid = state.data.services.length > 0;
+    if (state.step === 3) valid = !!state.data.timeline;
+    if (state.step === 4) {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      valid = name.length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    nextBtn.disabled = !valid;
+  }
+
+  document.querySelectorAll('.option-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const field = card.dataset.field;
+      const value = card.dataset.value;
+      const isMulti = card.dataset.multi === 'true';
+
+      if (isMulti) {
+        const arr = state.data[field];
+        const idx = arr.indexOf(value);
+        if (idx >= 0) { arr.splice(idx, 1); card.classList.remove('selected'); }
+        else { arr.push(value); card.classList.add('selected'); }
+      } else {
+        document.querySelectorAll(`.option-card[data-field="${field}"]`).forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        state.data[field] = value;
+      }
+      validateStep();
+    });
+  });
+
+  ['name', 'email', 'phone', 'notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => { state.data[id] = el.value; validateStep(); });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (nextBtn.disabled) return;
+    if (state.step < state.totalSteps) { state.step++; updateUI(); }
+    else {
+      console.log('Lead submitted:', state.data);
+      steps.forEach(s => s.classList.remove('active'));
+      nav.style.display = 'none';
+      successPanel.classList.add('active');
+      dots.forEach(d => { d.classList.remove('active'); d.classList.add('complete'); });
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    if (state.step > 1) { state.step--; updateUI(); }
+  });
+
+  updateUI();
+</script>
+
+</body>
+</html>
