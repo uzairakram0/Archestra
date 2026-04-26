@@ -15,6 +15,13 @@
     localStorage.setItem('archestra-theme', next);
   });
 
+  // Follow system preference changes in real time (only when user hasn't manually toggled)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('archestra-theme')) {
+      root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+  });
+
   // === FADE-UP ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
