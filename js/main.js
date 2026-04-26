@@ -2,17 +2,9 @@
   if (typeof twemoji !== 'undefined') twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
 
   // === THEME ===
-  const toggle = document.getElementById('themeToggle');
-  const root = document.documentElement;
-
-  // Toggle is session-only — never saved, system preference always wins on refresh
-  if (toggle) toggle.addEventListener('click', () => {
-    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-  });
-
   // Update live when system preference changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
   });
 
   // === FADE-UP ===
