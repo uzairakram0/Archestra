@@ -1486,11 +1486,16 @@ footer {
 
 .footer-bottom .legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
+.footer-col.connect {
+  display: flex;
+  flex-direction: column;
+}
 .theme-switch-wrap {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  margin-top: 1.4rem;
+  margin-top: auto;
+  padding-top: 1.4rem;
   color: var(--muted);
 }
 .theme-switch {
