@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
@@ -8,1093 +8,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root[data-theme="light"] {
-    --bg: #ffffff;
-    --bg-2: #f5f5f7;
-    --bg-3: #ebebed;
-    --ink: #1d1d1f;
-    --ink-2: #424245;
-    --muted: #86868b;
-    --line: rgba(0, 0, 0, 0.08);
-    --line-2: rgba(0, 0, 0, 0.04);
-    --accent: #0071e3;
-    --accent-hover: #0077ed;
-    --card: #fafafa;
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
-  }
-
-  :root[data-theme="dark"] {
-    --bg: #000000;
-    --bg-2: #0a0a0b;
-    --bg-3: #1c1c1e;
-    --ink: #f5f5f7;
-    --ink-2: #c7c7cc;
-    --muted: #86868b;
-    --line: rgba(255, 255, 255, 0.1);
-    --line-2: rgba(255, 255, 255, 0.05);
-    --accent: #2997ff;
-    --accent-hover: #4ba5ff;
-    --card: #1c1c1e;
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 1.47;
-    overflow-x: hidden;
-    transition: background 0.3s ease, color 0.3s ease;
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.01em;
-  }
-
-  ::selection { background: var(--accent); color: #fff; }
-
-  /* =================== NAV =================== */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: color-mix(in srgb, var(--bg) 80%, transparent);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 1px solid var(--line-2);
-    padding: 0 2rem;
-    height: 52px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: var(--ink);
-    font-weight: 600;
-    font-size: 1.1rem;
-    letter-spacing: -0.015em;
-  }
-
-  .logo-mark {
-    width: 22px; height: 22px;
-    display: grid;
-    place-items: center;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.2rem;
-    justify-self: center;
-  }
-
-  .nav-links a {
-    color: var(--ink-2);
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 400;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover { color: var(--ink); }
-
-  .nav-right { display: flex; align-items: center; gap: 0.6rem; }
-
-  .theme-toggle {
-    width: 28px; height: 28px;
-    border: none;
-    background: transparent;
-    color: var(--ink-2);
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    transition: all 0.2s;
-  }
-
-  .theme-toggle:hover { background: var(--bg-2); color: var(--ink); }
-  .theme-toggle svg { width: 15px; height: 15px; }
-  .theme-toggle .sun { display: none; }
-  [data-theme="dark"] .theme-toggle .sun { display: block; }
-  [data-theme="dark"] .theme-toggle .moon { display: none; }
-
-  /* =================== BUTTONS =================== */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 0.8rem 1.6rem;
-    border-radius: 980px;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    transition: all 0.2s ease;
-    letter-spacing: -0.01em;
-    line-height: 1;
-  }
-
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: var(--accent-hover); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--accent);
-  }
-
-  .btn-ghost:hover { color: var(--accent-hover); gap: 0.5rem; }
-  .btn-ghost::after {
-    content: '›';
-    font-size: 1.1em;
-    transition: transform 0.2s;
-    line-height: 0.5;
-  }
-  .btn-ghost:hover::after { transform: translateX(2px); }
-
-  .btn-dark {
-    background: var(--ink);
-    color: var(--bg);
-  }
-  .btn-dark:hover { opacity: 0.85; }
-
-  /* =================== SECTIONS =================== */
-  section { padding: 120px 24px; position: relative; }
-
-  .container { max-width: 1120px; margin: 0 auto; }
-  .container-wide { max-width: 1400px; margin: 0 auto; }
-
-  /* =================== HERO =================== */
-  .hero {
-    padding: 120px 24px 80px;
-    text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.85rem;
-    color: var(--accent);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.2rem;
-  }
-
-  .hero h1 {
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    font-weight: 600;
-    letter-spacing: -0.045em;
-    line-height: 1.05;
-    color: var(--ink);
-    max-width: 900px;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero .subhead {
-    font-size: clamp(1.2rem, 2vw, 1.7rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    color: var(--ink-2);
-    line-height: 1.3;
-    max-width: 680px;
-    margin-bottom: 2.2rem;
-  }
-
-  .hero-ctas {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* =================== TRANSFORM SCENE =================== */
-  /* The 4-stage scroll-driven transformation */
-  .transform-scene {
-    padding: 80px 24px 120px;
-    background: var(--bg);
-    position: relative;
-  }
-
-  .transform-track {
-    max-width: 1240px;
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .transform-stage {
-    max-width: 1120px;
-    margin: 0 auto;
-    border-radius: 24px;
-    background: var(--bg-2);
-    overflow: hidden;
-    aspect-ratio: 16 / 10;
-    position: relative;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .stage-canvas {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 3rem;
-  }
-
-  .stage-canvas svg {
-    width: 100%;
-    height: 100%;
-    max-width: 900px;
-    max-height: 540px;
-  }
-
-  /* Each stage fades/transforms between with scroll */
-  .stage-frame {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 3rem;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-  }
-
-  .stage-frame.active {
-    opacity: 1;
-  }
-
-  .stage-label {
-    position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
-    z-index: 3;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--ink);
-    background: var(--bg);
-    padding: 0.4rem 0.8rem;
-    border-radius: 100px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .stage-label .badge {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-
-  .stage-step-indicator {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .step-btn {
-    padding: 0.6rem 1.2rem;
-    border-radius: 100px;
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--ink-2);
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .step-btn::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--muted);
-    transition: background 0.25s;
-  }
-
-  .step-btn:hover { border-color: var(--ink-2); color: var(--ink); }
-
-  .step-btn.active {
-    background: var(--ink);
-    color: var(--bg);
-    border-color: var(--ink);
-  }
-
-  .step-btn.active::before { background: var(--accent); }
-
-  .transform-caption {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 1.05rem;
-    color: var(--ink-2);
-    max-width: 620px;
-    margin-left: auto;
-    margin-right: auto;
-    min-height: 3rem;
-    transition: opacity 0.3s;
-  }
-
-  .transform-caption strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  /* =================== SECTION HEADINGS =================== */
-  .section-head {
-    text-align: center;
-    margin-bottom: 64px;
-  }
-
-  .section-eyebrow {
-    font-size: 0.85rem;
-    color: var(--accent);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    margin-bottom: 0.8rem;
-  }
-
-  .section-title {
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-    margin-bottom: 1rem;
-  }
-
-  .section-sub {
-    font-size: 1.15rem;
-    color: var(--ink-2);
-    max-width: 620px;
-    margin: 0 auto;
-    line-height: 1.4;
-    letter-spacing: -0.01em;
-  }
-
-  /* =================== FEATURE TILES =================== */
-  .tiles {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    max-width: 1120px;
-    margin: 0 auto;
-  }
-
-  .tile {
-    background: var(--card);
-    border-radius: 24px;
-    padding: 48px;
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.4s ease;
-  }
-
-  .tile:hover { transform: translateY(-4px); }
-
-  .tile.wide {
-    aspect-ratio: auto;
-    grid-column: span 2;
-    min-height: 500px;
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
-  }
-
-  .tile-content { max-width: 440px; }
-
-  .tile-eyebrow {
-    font-size: 0.85rem;
-    color: var(--accent);
-    font-weight: 500;
-    margin-bottom: 0.8rem;
-  }
-
-  .tile h3 {
-    font-size: clamp(1.7rem, 2.5vw, 2.3rem);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    margin-bottom: 0.8rem;
-    color: var(--ink);
-  }
-
-  .tile p {
-    font-size: 1.05rem;
-    color: var(--ink-2);
-    line-height: 1.45;
-    margin-bottom: 1.5rem;
-    max-width: 380px;
-  }
-
-  .tile-link {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 400;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: gap 0.2s;
-  }
-
-  .tile-link::after { content: '›'; font-size: 1.15em; line-height: 0.5; }
-
-  .tile-link:hover { gap: 0.5rem; }
-
-  .tile-visual {
-    position: relative;
-    display: grid;
-    place-items: center;
-    flex: 1;
-    color: var(--ink);
-  }
-
-  .tile-visual svg {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-  }
-
-  .tile.wide .tile-visual { align-self: stretch; }
-
-  /* =================== STATS STRIP =================== */
-  .stats-strip {
-    padding: 80px 24px;
-    background: var(--bg-2);
-    border-top: 1px solid var(--line-2);
-    border-bottom: 1px solid var(--line-2);
-  }
-
-  .stats-strip-inner {
-    max-width: 1120px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: clamp(2.5rem, 5vw, 3.8rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    color: var(--ink);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-num .unit {
-    font-size: 0.55em;
-    color: var(--muted);
-    font-weight: 500;
-    margin-left: 0.1em;
-  }
-
-  .stat-lbl {
-    font-size: 0.9rem;
-    color: var(--muted);
-    max-width: 160px;
-    margin: 0 auto;
-    line-height: 1.35;
-  }
-
-  /* =================== PROCESS TIMELINE =================== */
-  .process-timeline {
-    max-width: 1120px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 2px;
-    background: var(--line);
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-  }
-
-  .phase {
-    background: var(--bg);
-    padding: 32px 24px;
-    transition: background 0.3s;
-  }
-
-  .phase:hover { background: var(--bg-2); }
-
-  .phase-num {
-    display: inline-block;
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-
-  .phase h4 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-
-  .phase p {
-    font-size: 0.92rem;
-    color: var(--ink-2);
-    line-height: 1.45;
-    margin-bottom: 1rem;
-  }
-
-  .phase-dur {
-    font-size: 0.78rem;
-    color: var(--muted);
-    font-weight: 500;
-    padding-top: 0.8rem;
-    border-top: 1px solid var(--line);
-  }
-
-  /* =================== WORK SHOWCASE =================== */
-  .work-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    max-width: 1120px;
-    margin: 0 auto;
-  }
-
-  .project {
-    background: var(--card);
-    border-radius: 24px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: transform 0.4s ease;
-    aspect-ratio: 4 / 5;
-  }
-
-  .project:hover { transform: translateY(-4px); }
-
-  .project.wide {
-    grid-column: span 2;
-    aspect-ratio: 21 / 9;
-    flex-direction: row;
-  }
-
-  .project-visual {
-    flex: 1;
-    position: relative;
-    background: var(--bg-2);
-    display: grid;
-    place-items: center;
-    padding: 2rem;
-    overflow: hidden;
-    color: var(--ink);
-  }
-
-  .project-visual svg {
-    width: 100%;
-    height: auto;
-    max-height: 320px;
-  }
-
-  .project.wide .project-visual { min-width: 55%; }
-  .project.wide .project-body { max-width: 45%; }
-
-  .project-body {
-    padding: 2rem 2.5rem 2.5rem;
-  }
-
-  .project-tag {
-    display: inline-block;
-    font-size: 0.75rem;
-    color: var(--accent);
-    font-weight: 500;
-    margin-bottom: 0.8rem;
-  }
-
-  .project h3 {
-    font-size: 1.7rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    margin-bottom: 0.4rem;
-  }
-
-  .project .loc {
-    color: var(--ink-2);
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-  }
-
-  .project .desc {
-    color: var(--ink-2);
-    font-size: 0.98rem;
-    line-height: 1.5;
-  }
-
-  /* =================== TESTIMONIALS =================== */
-  .quotes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    max-width: 1120px;
-    margin: 0 auto;
-  }
-
-  .quote {
-    background: var(--card);
-    border-radius: 24px;
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .quote-text {
-    font-size: 1.15rem;
-    color: var(--ink);
-    line-height: 1.45;
-    letter-spacing: -0.015em;
-    margin-bottom: 2rem;
-    flex: 1;
-    font-weight: 400;
-  }
-
-  .quote-author { padding-top: 1.5rem; border-top: 1px solid var(--line); }
-
-  .quote-author .name { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.15rem; }
-
-  .quote-author .role { color: var(--muted); font-size: 0.88rem; }
-
-  /* =================== CTA HERO =================== */
-  .cta-hero {
-    padding: 140px 24px;
-    text-align: center;
-    background: var(--bg-2);
-  }
-
-  .cta-hero h2 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin-bottom: 1.2rem;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-hero p {
-    font-size: 1.25rem;
-    color: var(--ink-2);
-    max-width: 600px;
-    margin: 0 auto 2.5rem;
-    letter-spacing: -0.015em;
-    line-height: 1.4;
-  }
-
-  .cta-ctas { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
-
-  /* =================== INQUIRY WIZARD =================== */
-  .inquiry { padding: 120px 24px; }
-
-  .inquiry-card {
-    max-width: 680px;
-    margin: 0 auto;
-    background: var(--card);
-    border-radius: 28px;
-    padding: 3rem;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .wizard-progress {
-    display: flex;
-    gap: 0.3rem;
-    margin-bottom: 2rem;
-  }
-
-  .wizard-dot {
-    flex: 1;
-    height: 3px;
-    background: var(--line);
-    border-radius: 100px;
-    transition: background 0.3s;
-  }
-
-  .wizard-dot.active { background: var(--accent); }
-  .wizard-dot.complete { background: var(--ink); }
-
-  .wizard-step-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 0.6rem;
-  }
-
-  .wizard-question {
-    font-size: 1.7rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    margin-bottom: 1.8rem;
-    color: var(--ink);
-  }
-
-  .wizard-question small {
-    display: block;
-    font-weight: 400;
-    font-size: 0.95rem;
-    color: var(--muted);
-    margin-top: 0.3rem;
-    letter-spacing: -0.01em;
-  }
-
-  .wizard-step { display: none; }
-  .wizard-step.active { display: block; animation: stepIn 0.4s ease; }
-
-  @keyframes stepIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-  .option-card {
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    color: var(--ink);
-    padding: 1rem 1.2rem;
-    text-align: left;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-
-  [data-theme="dark"] .option-card { background: var(--bg-3); }
-
-  .option-card:hover { border-color: var(--ink-2); }
-
-  .option-card.selected {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 8%, var(--bg));
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-  }
-
-  .option-card svg { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; }
-
-  .option-card strong { display: block; font-weight: 600; font-size: 0.95rem; }
-
-  .option-card small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
-
-  .field-group { display: flex; flex-direction: column; gap: 1rem; }
-
-  .field { display: flex; flex-direction: column; gap: 0.4rem; }
-
-  .field label {
-    font-size: 0.78rem;
-    color: var(--ink-2);
-    font-weight: 500;
-  }
-
-  .field input, .field textarea {
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 0.85rem 1rem;
-    font-family: inherit;
-    font-size: 0.98rem;
-    color: var(--ink);
-    outline: none;
-    transition: all 0.2s;
-  }
-
-  [data-theme="dark"] .field input, [data-theme="dark"] .field textarea { background: var(--bg-3); }
-
-  .field input:focus, .field textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-  }
-
-  .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
-  .field textarea { resize: vertical; min-height: 80px; font-family: inherit; }
-
-  .wizard-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.8rem;
-  }
-
-  .wizard-back {
-    background: transparent;
-    border: none;
-    color: var(--ink-2);
-    font-family: inherit;
-    font-size: 0.95rem;
-    cursor: pointer;
-    padding: 0.5rem 0;
-    transition: color 0.2s;
-  }
-
-  .wizard-back:hover { color: var(--ink); }
-  .wizard-back:disabled { opacity: 0; pointer-events: none; }
-
-  .wizard-next {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.85rem 1.6rem;
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 500;
-    border-radius: 980px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .wizard-next:hover:not(:disabled) { background: var(--accent-hover); }
-  .wizard-next:disabled { opacity: 0.35; cursor: not-allowed; }
-
-  .wizard-success { display: none; text-align: center; padding: 1rem 0; }
-  .wizard-success.active { display: block; animation: stepIn 0.4s ease; }
-
-  .success-icon {
-    width: 64px; height: 64px;
-    margin: 0 auto 1.2rem;
-    background: color-mix(in srgb, var(--accent) 14%, transparent);
-    color: var(--accent);
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-  }
-
-  .success-icon svg { width: 32px; height: 32px; }
-
-  .wizard-success h3 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.6rem;
-  }
-
-  .wizard-success p {
-    color: var(--ink-2);
-    max-width: 380px;
-    margin: 0 auto;
-    line-height: 1.5;
-  }
-
-  /* =================== FOOTER =================== */
-  footer {
-    background: var(--bg-2);
-    padding: 40px 24px 24px;
-    border-top: 1px solid var(--line-2);
-    font-size: 0.78rem;
-  }
-
-  .footer-top {
-    max-width: 1120px;
-    margin: 0 auto 32px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 40px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .footer-col.brand {
-    grid-column: span 2;
-  }
-
-  .footer-col .logo { margin-bottom: 1rem; }
-
-  .footer-col p {
-    color: var(--ink-2);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    max-width: 320px;
-  }
-
-  .footer-offices {
-    margin-top: 1.2rem;
-    display: flex;
-    gap: 2rem;
-    font-size: 0.8rem;
-    color: var(--ink-2);
-    line-height: 1.5;
-  }
-
-  .footer-offices strong {
-    display: block;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 0.2rem;
-    font-size: 0.82rem;
-  }
-
-  .footer-col h4 {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-    color: var(--ink);
-  }
-
-  .footer-col a {
-    display: block;
-    color: var(--ink-2);
-    text-decoration: none;
-    padding: 0.3rem 0;
-    font-size: 0.8rem;
-    transition: color 0.2s;
-  }
-
-  .footer-col a:hover { color: var(--accent); }
-
-  .footer-bottom {
-    max-width: 1120px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    color: var(--muted);
-  }
-
-  .footer-bottom .legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-
-  /* =================== ANIMATIONS =================== */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-
-  .hero-eyebrow, .hero h1, .hero .subhead, .hero-ctas {
-    opacity: 0;
-    animation: heroIn 0.9s cubic-bezier(.2,.8,.2,1) forwards;
-  }
-  .hero-eyebrow { animation-delay: 0.05s; }
-  .hero h1 { animation-delay: 0.15s; }
-  .hero .subhead { animation-delay: 0.3s; }
-  .hero-ctas { animation-delay: 0.45s; }
-
-  @keyframes heroIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Stage-specific animations (for SVG transformation) */
-  @keyframes drawIn {
-    from { stroke-dashoffset: 1000; }
-    to { stroke-dashoffset: 0; }
-  }
-
-  .stage-frame[data-stage="1"].active svg path,
-  .stage-frame[data-stage="1"].active svg line,
-  .stage-frame[data-stage="1"].active svg rect {
-    stroke-dasharray: 1000;
-    animation: drawIn 1.2s ease-out forwards;
-  }
-
-  .stage-frame[data-stage="2"].active .wireframe-line {
-    stroke-dasharray: 600;
-    animation: drawIn 1s ease-out forwards;
-  }
-
-  /* =================== RESPONSIVE =================== */
-  @media (max-width: 900px) {
-    nav { padding: 0 1rem; gap: 1rem; grid-template-columns: auto 1fr; height: 48px; }
-    .nav-links { display: none; }
-
-    section { padding: 80px 20px; }
-
-    .hero { padding: 100px 20px 60px; min-height: auto; }
-
-    .transform-scene { padding: 60px 20px 80px; }
-    .transform-stage { aspect-ratio: 4 / 3; border-radius: 16px; }
-    .stage-canvas, .stage-frame { padding: 1.5rem; }
-
-    .tiles { grid-template-columns: 1fr; }
-    .tile { padding: 32px; aspect-ratio: auto; min-height: 420px; }
-    .tile.wide { grid-column: auto; flex-direction: column; gap: 1.5rem; min-height: 500px; }
-    .tile.wide .tile-visual { width: 100%; }
-
-    .stats-strip-inner { grid-template-columns: 1fr 1fr; gap: 32px 16px; }
-
-    .process-timeline { grid-template-columns: 1fr; }
-
-    .work-grid { grid-template-columns: 1fr; }
-    .project { aspect-ratio: auto; }
-    .project.wide { grid-column: auto; flex-direction: column; aspect-ratio: auto; }
-    .project.wide .project-visual { min-width: 0; }
-    .project.wide .project-body { max-width: 100%; }
-    .project-body { padding: 1.5rem; }
-
-    .quotes { grid-template-columns: 1fr; }
-
-    .inquiry-card { padding: 2rem; border-radius: 20px; }
-    .option-grid { grid-template-columns: 1fr; }
-
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .footer-col.brand { grid-column: span 2; }
-    .footer-offices { flex-direction: column; gap: 1rem; }
-  }
-
-  @media (max-width: 560px) {
-    .hero h1 { font-size: 2.6rem; }
-    .footer-top { grid-template-columns: 1fr; }
-    .footer-col.brand { grid-column: auto; }
-  }
-</style>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
 <!-- ============ NAV ============ -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 20 L11 3 L19 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M7 13 L15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
-    </div>
-    Archestra
-  </a>
   <div class="nav-links">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="1" width="10" height="22" rx="5" transform="rotate(25 9 12)" fill="currentColor"/>
+          <circle cx="19" cy="19" r="4.5" fill="currentColor"/>
+        </svg>
+      </div>
+      Archestra
+    </a>
     <a href="#transform">How it works</a>
     <a href="#services">Services</a>
     <a href="#process">Process</a>
+    <a href="#inquire">Contact</a>
     <a href="#work">Work</a>
     <a href="#clients">Clients</a>
-    <a href="#inquire">Contact</a>
   </div>
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -1111,6 +45,7 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero">
+  <canvas id="hero-3d" aria-hidden="true"></canvas>
   <div class="hero-eyebrow">Architecture, from the first line.</div>
   <h1>Plans, visualized.</h1>
   <p class="subhead">From measured 2D drawings to photoreal 3D renders — and finally to the home itself.</p>
@@ -1614,28 +549,6 @@
   </div>
 </section>
 
-<!-- ============ STATS STRIP ============ -->
-<div class="stats-strip">
-  <div class="stats-strip-inner">
-    <div>
-      <div class="stat-num">210<span class="unit">+</span></div>
-      <div class="stat-lbl">Projects delivered since 2014</div>
-    </div>
-    <div>
-      <div class="stat-num">98<span class="unit">%</span></div>
-      <div class="stat-lbl">Permit approval, first submission</div>
-    </div>
-    <div>
-      <div class="stat-num">4–6<span class="unit">wks</span></div>
-      <div class="stat-lbl">Average turnaround</div>
-    </div>
-    <div>
-      <div class="stat-num">4.9<span class="unit">/5</span></div>
-      <div class="stat-lbl">Client satisfaction rating</div>
-    </div>
-  </div>
-</div>
-
 <!-- ============ PROCESS ============ -->
 <section id="process">
   <div class="section-head">
@@ -1676,6 +589,224 @@
       <div class="phase-dur">Week 15+</div>
     </div>
   </div>
+</section>
+
+
+
+<!-- ============ CTA HERO ============ -->
+<section class="cta-hero">
+  <h2>Ready to draw<br>your first line?</h2>
+  <p>Get a free consultation and rough estimate within one business day. No obligation.</p>
+  <div class="cta-ctas">
+    <a href="#inquire" class="btn btn-primary">Start your project</a>
+    <a href="tel:+18175550184" class="btn btn-ghost">Or call (817) 555-0184</a>
+  </div>
+</section>
+
+<!-- ============ INQUIRY ============ -->
+<section id="inquire" class="inquiry">
+  <div class="section-head">
+    <div class="section-eyebrow">Get Started</div>
+    <h2 class="section-title">Tell us about<br>your project.</h2>
+    <p class="section-sub">Four quick questions and we'll reply within one business day.</p>
+  </div>
+
+  <form class="inquiry-card" id="wizard" onsubmit="return false;">
+    <div class="wizard-progress">
+      <div class="wizard-dot active" data-step="1"></div>
+      <div class="wizard-dot" data-step="2"></div>
+      <div class="wizard-dot" data-step="3"></div>
+      <div class="wizard-dot" data-step="4"></div>
+    </div>
+
+    <div class="wizard-step active" data-step="1">
+      <div class="wizard-step-label">Step 1 of 4</div>
+      <div class="wizard-question">What type of project are you planning?</div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="projectType" data-value="new-build">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12M9 21V12h6v9"/></svg>
+          <span><strong>New build</strong><small>Ground-up home</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="addition">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span><strong>Addition</strong><small>Extending a home</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="renovation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 21V9"/></svg>
+          <span><strong>Renovation</strong><small>Reshape existing</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="projectType" data-value="visuals-only">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+          <span><strong>Visuals only</strong><small>Plans or renders</small></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="2">
+      <div class="wizard-step-label">Step 2 of 4</div>
+      <div class="wizard-question">Which services do you need?<small>Select all that apply.</small></div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="services" data-value="2d-plans" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 3v18"/></svg>
+          <span><strong>2D plans</strong><small>Construction drawings</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="3d-renders" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span><strong>3D renders</strong><small>Photoreal visuals</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="permits" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M9 13h6M9 17h6"/></svg>
+          <span><strong>Permit docs</strong><small>Council-ready set</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="services" data-value="full-service" data-multi="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span><strong>Full service</strong><small>Start to finish</small></span>
+        </button>
+      </div>
+
+      <!-- Estimator accordion -->
+      <div class="est-accordion" id="estAccordion">
+        <button type="button" class="est-toggle-row" id="estToggle">
+          <span class="est-toggle-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Get a rough project estimate
+          </span>
+          <span class="est-toggle-right">
+            <span class="est-badge">Optional</span>
+            <svg class="est-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+        <div class="est-body" id="estBody">
+          <div class="est-fields">
+            <div class="est-field est-field-full">
+              <label class="est-label" for="estSqft">Square footage</label>
+              <input type="number" id="estSqft" class="est-input" placeholder="e.g. 2,400" min="100" max="50000" autocomplete="off"/>
+            </div>
+            <div class="est-counters">
+              <div class="est-counter-group">
+                <span class="est-counter-label">Bedrooms</span>
+                <div class="est-counter" id="ctrRooms">
+                  <button type="button" class="est-cnt-btn" data-dir="-1">−</button>
+                  <span class="est-cnt-val">3</span>
+                  <button type="button" class="est-cnt-btn" data-dir="1">+</button>
+                </div>
+              </div>
+              <div class="est-counter-group">
+                <span class="est-counter-label">Bathrooms</span>
+                <div class="est-counter" id="ctrBaths">
+                  <button type="button" class="est-cnt-btn" data-dir="-1">−</button>
+                  <span class="est-cnt-val">2</span>
+                  <button type="button" class="est-cnt-btn" data-dir="1">+</button>
+                </div>
+              </div>
+              <div class="est-counter-group">
+                <span class="est-counter-label">Kitchens</span>
+                <div class="est-counter" id="ctrKitchens">
+                  <button type="button" class="est-cnt-btn" data-dir="-1">−</button>
+                  <span class="est-cnt-val">1</span>
+                  <button type="button" class="est-cnt-btn" data-dir="1">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="est-result" id="estResult">
+            <span class="est-placeholder">Enter square footage to see an estimate</span>
+          </div>
+          <button type="button" class="est-skip-link" id="estSkip">Skip estimate</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="3">
+      <div class="wizard-step-label">Step 3 of 4</div>
+      <div class="wizard-question">When would you like to start?</div>
+      <div class="option-grid">
+        <button type="button" class="option-card" data-field="timeline" data-value="asap">
+          <span><strong>As soon as possible</strong><small>Within 1 month</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="1-3-months">
+          <span><strong>1–3 months</strong><small>Planning ahead</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="3-6-months">
+          <span><strong>3–6 months</strong><small>Still researching</small></span>
+        </button>
+        <button type="button" class="option-card" data-field="timeline" data-value="exploring">
+          <span><strong>Just exploring</strong><small>No firm date</small></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-step" data-step="4">
+      <div class="wizard-step-label">Step 4 of 4</div>
+
+      <!-- Sub 1: Pick a date -->
+      <div class="sched-panel" id="schedDate">
+        <div class="wizard-question">Schedule your free 30-min consultation</div>
+        <div class="cal-wrap">
+          <div class="cal-month-label" id="calMonth"></div>
+          <div class="cal-body">
+            <button type="button" class="cal-nav" id="calPrev">
+              <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M6 1L1 6L6 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="cal-inner">
+              <div class="cal-weekdays">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+              </div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+            <button type="button" class="cal-nav" id="calNext">
+              <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1L6 6L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub 2: Pick a time -->
+      <div class="sched-panel" id="schedTime">
+        <div class="wizard-question">Pick a time<small id="schedDateLabel"></small></div>
+        <div class="time-grid" id="timeGrid"></div>
+      </div>
+
+      <!-- Sub 3: Contact info -->
+      <div class="sched-panel" id="schedInfo">
+        <div class="sched-chosen" id="schedChosen"></div>
+        <div class="wizard-question">How can we reach you?</div>
+        <div class="field-group">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" placeholder="Jane Doe"/>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" placeholder="jane@example.com"/>
+          </div>
+          <div class="field">
+            <label for="phone">Phone (optional)</label>
+            <input type="tel" id="phone" placeholder="(817) 555-0123"/>
+          </div>
+          <div class="field">
+            <label for="notes">Project details</label>
+            <textarea id="notes" placeholder="Site address, square footage, budget, or anything else..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-success" id="wizardSuccess">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h3>You're booked.</h3>
+      <p>Your consultation is confirmed. We'll send a calendar invite and project brief to your email shortly.</p>
+    </div>
+
+    <div class="wizard-nav" id="wizardNav">
+      <button type="button" class="wizard-back" id="wizardBack" disabled>Back</button>
+      <button type="button" class="wizard-next" id="wizardNext" disabled>Continue</button>
+    </div>
+  </form>
 </section>
 
 <!-- ============ WORK ============ -->
@@ -1783,170 +914,117 @@
   </div>
 </section>
 
+
+<!-- ============ STATS STRIP ============ -->
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div>
+      <div class="stat-num">210<span class="unit">+</span></div>
+      <div class="stat-lbl">Projects delivered since 2014</div>
+    </div>
+    <div>
+      <div class="stat-num">98<span class="unit">%</span></div>
+      <div class="stat-lbl">Permit approval, first submission</div>
+    </div>
+    <div>
+      <div class="stat-num">4–6<span class="unit">wks</span></div>
+      <div class="stat-lbl">Average turnaround</div>
+    </div>
+    <div>
+      <div class="stat-num">4.9<span class="unit">/5</span></div>
+      <div class="stat-lbl">Client satisfaction rating</div>
+    </div>
+  </div>
+</div>
+
 <!-- ============ TESTIMONIALS ============ -->
 <section id="clients">
   <div class="section-head">
     <div class="section-eyebrow">Clients</div>
     <h2 class="section-title">What people<br>say about us.</h2>
   </div>
-
   <div class="quotes">
-    <div class="quote fade-up">
-      <p class="quote-text">"Archestra delivered our permit set two weeks ahead of schedule. The 3D renders helped us settle three design decisions that would've cost us a fortune to change later."</p>
+    <div class="quote">
+      <p class="quote-text">"An excellent collaboration throughout the project. Archestra Studio demonstrated strong design sensitivity and professionalism in developing a compelling exterior architectural concept, complemented by high-quality 3D visualizations and animations. Complex constraints were handled efficiently, and all project challenges were addressed with thoughtful solutions. I would gladly collaborate with Archestra Studio again on future architectural design projects."</p>
       <div class="quote-author">
-        <div class="name">Sarah Chen</div>
-        <div class="role">Homeowner · Southlake, TX</div>
+        <img src="assets/kaicarcare.webp" alt="kaicarcare" class="quote-avatar"/>
+        <div>
+          <div class="name">kaicarcare</div>
+          <div class="role">3D Modeling &amp; Rendering ★★★★★</div>
+        </div>
       </div>
     </div>
-
-    <div class="quote fade-up">
-      <p class="quote-text">"We've worked with dozens of architects. Archestra is the one firm that consistently sends documentation so clean our crews don't have to call with questions."</p>
+    <div class="quote">
+      <p class="quote-text">"We've worked with three architecture firms. Archestra is the only one that consistently hits the schedule and stays within scope."</p>
       <div class="quote-author">
-        <div class="name">Marcus Brady</div>
-        <div class="role">Project Manager · Meridian Homes</div>
+        <div class="name">River Oak Builders</div>
+        <div class="role">Custom Home Builder · Fort Worth, TX</div>
       </div>
     </div>
-
-    <div class="quote fade-up">
-      <p class="quote-text">"Thoughtful, responsive, and unusually good at listening. They turned a complicated heritage renovation into a set of plans we could actually build from."</p>
+    <div class="quote">
+      <p class="quote-text">"The visualizations were so detailed our contractor used them as a reference guide on site. Saved us thousands in change orders."</p>
       <div class="quote-author">
-        <div class="name">David &amp; Priya Okonkwo</div>
+        <div class="name">Priya &amp; Anil K.</div>
         <div class="role">Homeowners · Brooklyn, NY</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ CTA HERO ============ -->
-<section class="cta-hero">
-  <h2>Ready to draw<br>your first line?</h2>
-  <p>Get a free consultation and rough estimate within one business day. No obligation.</p>
-  <div class="cta-ctas">
-    <a href="#inquire" class="btn btn-primary">Start your project</a>
-    <a href="tel:+18175550184" class="btn btn-ghost">Or call (817) 555-0184</a>
-  </div>
-</section>
-
-<!-- ============ INQUIRY ============ -->
-<section id="inquire" class="inquiry">
+<!-- ============ ADDITIONAL PROJECTS ============ -->
+<section id="additional-work">
   <div class="section-head">
-    <div class="section-eyebrow">Get Started</div>
-    <h2 class="section-title">Tell us about<br>your project.</h2>
-    <p class="section-sub">Four quick questions and we'll reply within one business day.</p>
+    <div class="section-eyebrow">More Work</div>
+    <h2 class="section-title">Additional projects.</h2>
+    <p class="section-sub">Click any project to see the full render and details.</p>
   </div>
+  <div class="add-projects-grid">
 
-  <form class="inquiry-card" id="wizard" onsubmit="return false;">
-    <div class="wizard-progress">
-      <div class="wizard-dot active" data-step="1"></div>
-      <div class="wizard-dot" data-step="2"></div>
-      <div class="wizard-dot" data-step="3"></div>
-      <div class="wizard-dot" data-step="4"></div>
-    </div>
-
-    <div class="wizard-step active" data-step="1">
-      <div class="wizard-step-label">Step 1 of 4</div>
-      <div class="wizard-question">What type of project are you planning?</div>
-      <div class="option-grid">
-        <button type="button" class="option-card" data-field="projectType" data-value="new-build">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12M9 21V12h6v9"/></svg>
-          <span><strong>New build</strong><small>Ground-up home</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="projectType" data-value="addition">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span><strong>Addition</strong><small>Extending a home</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="projectType" data-value="renovation">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 21V9"/></svg>
-          <span><strong>Renovation</strong><small>Reshape existing</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="projectType" data-value="visuals-only">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
-          <span><strong>Visuals only</strong><small>Plans or renders</small></span>
-        </button>
+    <div class="add-project-card" data-modal="modal-auditorium">
+      <img src="assets/AuditioriumOman1.webp" alt="Auditorium Oman"/>
+      <div class="card-overlay"><span class="card-overlay-label">View project →</span></div>
+      <div class="add-project-card-body">
+        <div class="add-project-tag">3D Render · Interior · Oman</div>
+        <h3>Auditorium Oman</h3>
+        <p>Contemporary auditorium interior for the Oman Convention Center — warm materiality, Lamm seating, and refined acoustics.</p>
       </div>
     </div>
 
-    <div class="wizard-step" data-step="2">
-      <div class="wizard-step-label">Step 2 of 4</div>
-      <div class="wizard-question">Which services do you need?<small>Select all that apply.</small></div>
-      <div class="option-grid">
-        <button type="button" class="option-card" data-field="services" data-value="2d-plans" data-multi="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M9 3v18"/></svg>
-          <span><strong>2D plans</strong><small>Construction drawings</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="services" data-value="3d-renders" data-multi="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <span><strong>3D renders</strong><small>Photoreal visuals</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="services" data-value="permits" data-multi="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M9 13h6M9 17h6"/></svg>
-          <span><strong>Permit docs</strong><small>Council-ready set</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="services" data-value="full-service" data-multi="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span><strong>Full service</strong><small>Start to finish</small></span>
-        </button>
-      </div>
-    </div>
-
-    <div class="wizard-step" data-step="3">
-      <div class="wizard-step-label">Step 3 of 4</div>
-      <div class="wizard-question">When would you like to start?</div>
-      <div class="option-grid">
-        <button type="button" class="option-card" data-field="timeline" data-value="asap">
-          <span><strong>As soon as possible</strong><small>Within 1 month</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="timeline" data-value="1-3-months">
-          <span><strong>1–3 months</strong><small>Planning ahead</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="timeline" data-value="3-6-months">
-          <span><strong>3–6 months</strong><small>Still researching</small></span>
-        </button>
-        <button type="button" class="option-card" data-field="timeline" data-value="exploring">
-          <span><strong>Just exploring</strong><small>No firm date</small></span>
-        </button>
-      </div>
-    </div>
-
-    <div class="wizard-step" data-step="4">
-      <div class="wizard-step-label">Step 4 of 4</div>
-      <div class="wizard-question">How can we reach you?</div>
-      <div class="field-group">
-        <div class="field">
-          <label for="name">Full name</label>
-          <input type="text" id="name" placeholder="Jane Doe"/>
-        </div>
-        <div class="field">
-          <label for="email">Email address</label>
-          <input type="email" id="email" placeholder="jane@example.com"/>
-        </div>
-        <div class="field">
-          <label for="phone">Phone (optional)</label>
-          <input type="tel" id="phone" placeholder="(817) 555-0123"/>
-        </div>
-        <div class="field">
-          <label for="notes">Project details</label>
-          <textarea id="notes" placeholder="Site address, square footage, budget, or anything else..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="wizard-success" id="wizardSuccess">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 6L9 17l-5-5"/>
-        </svg>
-      </div>
-      <h3>Request received.</h3>
-      <p>We'll reply within one business day with next steps and a time for your free consultation.</p>
-    </div>
-
-    <div class="wizard-nav" id="wizardNav">
-      <button type="button" class="wizard-back" id="wizardBack" disabled>Back</button>
-      <button type="button" class="wizard-next" id="wizardNext" disabled>Continue</button>
-    </div>
-  </form>
+  </div>
 </section>
+
+<!-- Modal: Auditorium -->
+<div class="proj-modal-backdrop" id="modal-auditorium">
+  <div class="proj-modal-wrap">
+    <div class="proj-modal">
+
+      <!-- Fixed header -->
+      <div class="proj-modal-header">
+        <div class="proj-modal-header-text">
+          <div class="proj-modal-tag">3D Modeling &amp; Rendering · Interior Design · Oman</div>
+          <h2>Auditorium Oman</h2>
+        </div>
+        <button class="proj-modal-close" data-close-modal>&#x2715;</button>
+      </div>
+
+      <!-- Scrollable content -->
+      <div class="proj-modal-scroll">
+        <img class="proj-modal-hero" src="assets/AuditioriumOman1.webp" alt="Auditorium Oman — view 1"/>
+        <div class="proj-modal-gallery">
+          <img src="assets/AuditioriumOman1.webp" alt="Auditorium Oman — seating detail"/>
+          <img src="assets/AuditoriumOman2.webp" alt="Auditorium Oman — overview"/>
+        </div>
+        <div class="proj-modal-body">
+          <p>This auditorium interior was designed as part of a project developed in January for the <strong>Oman Convention Center</strong> in collaboration with <strong>Kuwait Gulf Consult</strong>. The design focuses on a clean, contemporary aesthetic with a warm and minimal material palette to create a refined and comfortable viewing environment.</p>
+          <p style="margin-top:1rem;">The seating layout is carefully organized on stepped platforms to ensure clear sightlines and optimal viewing angles for all occupants. High-quality <strong>Tail seating by Lamm</strong> has been integrated into the design, providing ergonomic comfort while maintaining a sleek and modern appearance.</p>
+          <p style="margin-top:1rem;">Natural wood wall paneling and soft neutral tones were selected to enhance the acoustic performance and visual warmth of the space. Linear recessed ceiling lights and subtle step lighting guide circulation while creating a calm and sophisticated atmosphere. Full-height vertical curtains on the side wall introduce soft daylight control and add a sense of height and elegance to the auditorium.</p>
+          <p style="margin-top:1rem;">Overall, the design balances functionality, acoustics, and modern aesthetics to deliver a comfortable and visually cohesive auditorium environment suitable for conferences, presentations, and cultural events.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ============ FOOTER ============ -->
 <footer>
@@ -1954,9 +1032,9 @@
     <div class="footer-col brand">
       <a href="#" class="logo">
         <div class="logo-mark">
-          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 20 L11 3 L19 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M7 13 L15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <svg viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="1" width="10" height="22" rx="5" transform="rotate(25 9 12)" fill="currentColor"/>
+            <circle cx="19" cy="19" r="4.5" fill="currentColor"/>
           </svg>
         </div>
         Archestra
@@ -2009,166 +1087,8 @@
   </div>
 </footer>
 
-<script>
-  // === THEME ===
-  const toggle = document.getElementById('themeToggle');
-  const root = document.documentElement;
-  const saved = localStorage.getItem('archestra-theme');
-  if (saved) root.setAttribute('data-theme', saved);
-  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    root.setAttribute('data-theme', 'dark');
-  }
-  toggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('archestra-theme', next);
-  });
-
-  // === FADE-UP ===
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-  // === TRANSFORM SCENE ===
-  const stageFrames = document.querySelectorAll('.stage-frame');
-  const stageBtns = document.querySelectorAll('.step-btn');
-  const captionEl = document.getElementById('transformCaption');
-
-  const captions = {
-    1: '<strong>Stage 01 — 2D Floor Plan.</strong> Every project begins with measured, permit-ready plans. Walls, doors, dimensions, and rooms — drawn to scale.',
-    2: '<strong>Stage 02 — 3D Wireframe.</strong> The plan lifts into three dimensions. A precise geometric model of every wall, window, roof, and opening.',
-    3: '<strong>Stage 03 — 3D Render.</strong> Light, material, and landscape come together. Photoreal visualizations let you walk through the home before it exists.',
-    4: '<strong>Stage 04 — Built.</strong> The drawings become a place. Handed to your builder, stamped by council, and made real on the site.'
-  };
-
-  let currentStage = 1;
-  let autoplayTimer = null;
-
-  function setStage(n) {
-    currentStage = n;
-    stageFrames.forEach(f => f.classList.toggle('active', parseInt(f.dataset.stage) === n));
-    stageBtns.forEach(b => b.classList.toggle('active', parseInt(b.dataset.stageBtn) === n));
-    captionEl.style.opacity = '0';
-    setTimeout(() => {
-      captionEl.innerHTML = captions[n];
-      captionEl.style.opacity = '1';
-    }, 200);
-  }
-
-  stageBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      stopAutoplay();
-      setStage(parseInt(btn.dataset.stageBtn));
-    });
-  });
-
-  function startAutoplay() {
-    stopAutoplay();
-    autoplayTimer = setInterval(() => {
-      const next = currentStage >= 4 ? 1 : currentStage + 1;
-      setStage(next);
-    }, 3500);
-  }
-
-  function stopAutoplay() {
-    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
-  }
-
-  // Start autoplay only when transform section is visible
-  const transformSection = document.getElementById('transform');
-  const transformObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) startAutoplay();
-      else stopAutoplay();
-    });
-  }, { threshold: 0.3 });
-  transformObs.observe(transformSection);
-
-  // === WIZARD ===
-  const state = {
-    step: 1,
-    totalSteps: 4,
-    data: { projectType: null, services: [], timeline: null, name: '', email: '', phone: '', notes: '' }
-  };
-
-  const steps = document.querySelectorAll('.wizard-step');
-  const dots = document.querySelectorAll('.wizard-dot');
-  const backBtn = document.getElementById('wizardBack');
-  const nextBtn = document.getElementById('wizardNext');
-  const nav = document.getElementById('wizardNav');
-  const successPanel = document.getElementById('wizardSuccess');
-
-  function updateUI() {
-    steps.forEach(s => s.classList.toggle('active', parseInt(s.dataset.step) === state.step));
-    dots.forEach((d, i) => {
-      d.classList.remove('active', 'complete');
-      if (i + 1 < state.step) d.classList.add('complete');
-      else if (i + 1 === state.step) d.classList.add('active');
-    });
-    backBtn.disabled = state.step === 1;
-    nextBtn.textContent = state.step === state.totalSteps ? 'Submit request' : 'Continue';
-    validateStep();
-  }
-
-  function validateStep() {
-    let valid = false;
-    if (state.step === 1) valid = !!state.data.projectType;
-    if (state.step === 2) valid = state.data.services.length > 0;
-    if (state.step === 3) valid = !!state.data.timeline;
-    if (state.step === 4) {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      valid = name.length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-    nextBtn.disabled = !valid;
-  }
-
-  document.querySelectorAll('.option-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const field = card.dataset.field;
-      const value = card.dataset.value;
-      const isMulti = card.dataset.multi === 'true';
-
-      if (isMulti) {
-        const arr = state.data[field];
-        const idx = arr.indexOf(value);
-        if (idx >= 0) { arr.splice(idx, 1); card.classList.remove('selected'); }
-        else { arr.push(value); card.classList.add('selected'); }
-      } else {
-        document.querySelectorAll(`.option-card[data-field="${field}"]`).forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        state.data[field] = value;
-      }
-      validateStep();
-    });
-  });
-
-  ['name', 'email', 'phone', 'notes'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', () => { state.data[id] = el.value; validateStep(); });
-  });
-
-  nextBtn.addEventListener('click', () => {
-    if (nextBtn.disabled) return;
-    if (state.step < state.totalSteps) { state.step++; updateUI(); }
-    else {
-      console.log('Lead submitted:', state.data);
-      steps.forEach(s => s.classList.remove('active'));
-      nav.style.display = 'none';
-      successPanel.classList.add('active');
-      dots.forEach(d => { d.classList.remove('active'); d.classList.add('complete'); });
-    }
-  });
-
-  backBtn.addEventListener('click', () => {
-    if (state.step > 1) { state.step--; updateUI(); }
-  });
-
-  updateUI();
-</script>
-
+<script src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="js/hero-3d.js"></script>
 </body>
 </html>
