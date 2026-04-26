@@ -689,13 +689,33 @@ section { padding: 120px 24px; position: relative; }
 }
 
 /* =================== TESTIMONIALS =================== */
-.quotes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  max-width: 1120px;
-  margin: 0 auto;
+#clients {
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
 }
+#clients .section-head {
+  padding-left: max(2rem, calc((100vw - 1120px) / 2));
+  padding-right: max(2rem, calc((100vw - 1120px) / 2));
+}
+.quotes-track-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.quotes {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 8px max(2rem, calc((100vw - 1120px) / 2)) 24px;
+  cursor: grab;
+  user-select: none;
+}
+.quotes::-webkit-scrollbar { display: none; }
+.quotes.dragging { cursor: grabbing; scroll-snap-type: none; }
 
 .quote {
   background: var(--card);
@@ -703,13 +723,15 @@ section { padding: 120px 24px; position: relative; }
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
+  flex: 0 0 380px;
+  scroll-snap-align: start;
 }
 
 .quote-text {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--ink);
-  line-height: 1.45;
-  letter-spacing: -0.015em;
+  line-height: 1.55;
+  letter-spacing: -0.012em;
   margin-bottom: 2rem;
   flex: 1;
   font-weight: 400;
@@ -1561,7 +1583,9 @@ footer {
   .project.wide .project-body { max-width: 100%; }
   .project-body { padding: 1.5rem; }
 
-  .quotes { grid-template-columns: 1fr; }
+  .quote { flex: 0 0 88vw; }
+  #clients .section-head { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .quotes { padding-left: 1.2rem; padding-right: 1.2rem; }
 
   .inquiry-card { padding: 2rem; border-radius: 20px; }
   .option-grid { grid-template-columns: 1fr; }
