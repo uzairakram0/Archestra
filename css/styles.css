@@ -757,7 +757,7 @@ section { padding: 120px 24px; position: relative; }
 .quote-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .quote-author .name { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.15rem; }
 .quote-author .role { color: var(--muted); font-size: 0.88rem; }
-.flag-icon { display: inline-block; vertical-align: middle; border-radius: 2px; position: relative; top: -1px; }
+img.emoji { height: 1.1em; width: auto; vertical-align: -0.15em; display: inline-block; }
 
 /* =================== CTA HERO =================== */
 .cta-hero {

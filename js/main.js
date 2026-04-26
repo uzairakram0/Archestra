@@ -1,4 +1,7 @@
-﻿  // === THEME ===
+﻿  // === TWEMOJI ===
+  if (typeof twemoji !== 'undefined') twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+
+  // === THEME ===
   const toggle = document.getElementById('themeToggle');
   const root = document.documentElement;
   const saved = localStorage.getItem('archestra-theme');
