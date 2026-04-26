@@ -1618,3 +1618,115 @@ footer {
   .footer-top { grid-template-columns: 1fr; }
   .footer-col.brand { grid-column: auto; }
 }
+
+/* =================== WHATSAPP WIDGET =================== */
+.wa-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.wa-fab {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.wa-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+.wa-panel {
+  background: var(--card);
+  border-radius: 20px;
+  width: 320px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+  overflow: hidden;
+  transform-origin: bottom right;
+  transform: scale(0.92) translateY(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1), opacity 0.2s;
+}
+.wa-panel.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+.wa-header {
+  background: #25D366;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wa-header-info { display: flex; align-items: center; gap: 0.75rem; }
+.wa-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #fff; font-size: 0.82rem; flex-shrink: 0;
+}
+.wa-name { font-weight: 700; color: #fff; font-size: 0.95rem; }
+.wa-status { font-size: 0.73rem; color: rgba(255,255,255,0.85); margin-top: 0.1rem; }
+.wa-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 1rem; opacity: 0.8; padding: 0; line-height: 1; }
+.wa-close:hover { opacity: 1; }
+.wa-body { padding: 1.2rem; background: var(--bg-2); }
+.wa-bubble {
+  background: var(--card);
+  border-radius: 12px 12px 12px 2px;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.55;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: inline-block;
+}
+.wa-form { padding: 1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.wa-input, .wa-textarea {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--ink);
+  font-family: inherit;
+  outline: none;
+  resize: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.wa-input:focus, .wa-textarea:focus { border-color: #25D366; }
+.wa-send {
+  background: #25D366;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.72rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+.wa-send:hover { background: #1ebe5d; }
+.wa-send:active { transform: scale(0.97); }
+@media (max-width: 400px) {
+  .wa-widget { bottom: 16px; right: 16px; }
+  .wa-panel { width: calc(100vw - 32px); }
+}

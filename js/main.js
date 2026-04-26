@@ -450,3 +450,54 @@
     }
   })();
 })();
+
+// === WHATSAPP WIDGET ===
+(function () {
+  // ← Replace with your WhatsApp number (country code + number, no spaces or +)
+  // Example: '14155550123' for a US number
+  var PHONE = 'YOUR_WHATSAPP_NUMBER';
+
+  var fab     = document.getElementById('waFab');
+  var panel   = document.getElementById('waPanel');
+  var closeBtn = document.getElementById('waClose');
+  var sendBtn = document.getElementById('waSend');
+  var nameEl  = document.getElementById('waName');
+  var msgEl   = document.getElementById('waMessage');
+
+  if (!fab || !panel) return;
+
+  function openPanel()  { panel.classList.add('open'); nameEl.focus(); }
+  function closePanel() { panel.classList.remove('open'); }
+
+  fab.addEventListener('click', function (e) {
+    e.stopPropagation();
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  sendBtn.addEventListener('click', function () {
+    var name = nameEl.value.trim();
+    var msg  = msgEl.value.trim();
+    if (!msg) { msgEl.focus(); return; }
+
+    var text = name ? 'Hi, I\'m ' + name + '. ' + msg : msg;
+    window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank');
+
+    nameEl.value = '';
+    msgEl.value  = '';
+    closePanel();
+  });
+
+  // Send on Enter inside textarea (Shift+Enter = new line)
+  msgEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function (e) {
+    if (!document.getElementById('waWidget').contains(e.target)) closePanel();
+  });
+})();
