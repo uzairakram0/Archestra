@@ -1619,7 +1619,7 @@ footer {
   .footer-col.brand { grid-column: auto; }
 }
 
-/* =================== WHATSAPP WIDGET =================== */
+/* =================== CHAT WIDGET =================== */
 .wa-widget {
   position: fixed;
   bottom: 24px;
@@ -1631,26 +1631,32 @@ footer {
   gap: 12px;
 }
 .wa-fab {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: #25D366;
+  height: 48px;
+  padding: 0 1.2rem;
+  border-radius: 999px;
+  background: var(--accent);
   color: #fff;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
   flex-shrink: 0;
+  letter-spacing: -0.01em;
 }
-.wa-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+.wa-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.2); }
+.wa-fab svg { flex-shrink: 0; }
 .wa-panel {
   background: var(--card);
   border-radius: 20px;
   width: 320px;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.14);
+  border: 1px solid var(--line);
   overflow: hidden;
   transform-origin: bottom right;
   transform: scale(0.92) translateY(8px);
@@ -1664,7 +1670,7 @@ footer {
   pointer-events: all;
 }
 .wa-header {
-  background: #25D366;
+  background: var(--accent);
   padding: 1rem 1.2rem;
   display: flex;
   align-items: center;
@@ -1672,14 +1678,15 @@ footer {
 }
 .wa-header-info { display: flex; align-items: center; gap: 0.75rem; }
 .wa-avatar {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
   display: flex; align-items: center; justify-content: center;
-  font-weight: 700; color: #fff; font-size: 0.82rem; flex-shrink: 0;
+  font-weight: 700; color: #fff; font-size: 0.8rem; flex-shrink: 0;
+  letter-spacing: -0.02em;
 }
-.wa-name { font-weight: 700; color: #fff; font-size: 0.95rem; }
-.wa-status { font-size: 0.73rem; color: rgba(255,255,255,0.85); margin-top: 0.1rem; }
-.wa-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 1rem; opacity: 0.8; padding: 0; line-height: 1; }
+.wa-name { font-weight: 700; color: #fff; font-size: 0.9rem; }
+.wa-status { font-size: 0.72rem; color: rgba(255,255,255,0.8); margin-top: 0.1rem; }
+.wa-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 1rem; opacity: 0.7; padding: 0; line-height: 1; }
 .wa-close:hover { opacity: 1; }
 .wa-body { padding: 1.2rem; background: var(--bg-2); }
 .wa-bubble {
@@ -1691,6 +1698,7 @@ footer {
   line-height: 1.55;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   display: inline-block;
+  border: 1px solid var(--line);
 }
 .wa-form { padding: 1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
 .wa-input, .wa-textarea {
@@ -1707,9 +1715,9 @@ footer {
   width: 100%;
   box-sizing: border-box;
 }
-.wa-input:focus, .wa-textarea:focus { border-color: #25D366; }
+.wa-input:focus, .wa-textarea:focus { border-color: var(--accent); }
 .wa-send {
-  background: #25D366;
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -1721,10 +1729,10 @@ footer {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: background 0.15s, transform 0.1s;
+  transition: opacity 0.15s, transform 0.1s;
   font-family: inherit;
 }
-.wa-send:hover { background: #1ebe5d; }
+.wa-send:hover { opacity: 0.88; }
 .wa-send:active { transform: scale(0.97); }
 @media (max-width: 400px) {
   .wa-widget { bottom: 16px; right: 16px; }
