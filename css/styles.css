@@ -1688,19 +1688,16 @@ footer {
 .wa-status { font-size: 0.72rem; color: rgba(255,255,255,0.8); margin-top: 0.1rem; }
 .wa-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 1rem; opacity: 0.7; padding: 0; line-height: 1; }
 .wa-close:hover { opacity: 1; }
-.wa-body { padding: 1.2rem; background: var(--bg-2); }
-.wa-bubble {
-  background: var(--card);
-  border-radius: 12px 12px 12px 2px;
-  padding: 0.75rem 1rem;
-  font-size: 0.88rem;
-  color: var(--ink);
-  line-height: 1.55;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  display: inline-block;
-  border: 1px solid var(--line);
+.wa-form { padding: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.wa-powered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding-top: 0.2rem;
 }
-.wa-form { padding: 1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
 .wa-input, .wa-textarea {
   background: var(--bg);
   border: 1px solid var(--line);
