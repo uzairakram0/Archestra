@@ -729,6 +729,7 @@ section { padding: 120px 24px; position: relative; }
 }
 .quotes-inner {
   display: flex;
+  flex-shrink: 0;
   gap: 28px;
   will-change: transform;
 }

@@ -378,8 +378,10 @@
     var wrap = document.querySelector('.quotes-track-wrap');
     if (!inner || !wrap) return;
 
-    // Duplicate cards for seamless loop
-    Array.from(inner.children).forEach(function (card) {
+    // Clone cards for seamless loop, track how many originals
+    var origCards = Array.from(inner.children);
+    var origCount = origCards.length;
+    origCards.forEach(function (card) {
       var clone = card.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
       inner.appendChild(clone);
@@ -390,19 +392,26 @@
     var dragVel = 0;
     var dragging = false;
     var lastX = 0;
+    var halfW = 0;
 
-    function halfWidth() { return inner.scrollWidth / 2; }
+    // Measure exact start of clones after layout (avoids scrollWidth rounding issues)
+    requestAnimationFrame(function () {
+      var iRect = inner.getBoundingClientRect();
+      var cRect = inner.children[origCount].getBoundingClientRect();
+      halfW = cRect.left - iRect.left;
+      requestAnimationFrame(tick);
+    });
 
     function tick() {
       if (!dragging) dragVel *= 0.88;
       pos += baseSpeed + dragVel;
-      var half = halfWidth();
-      if (pos >= half) pos -= half;
-      if (pos < 0) pos += half;
+      if (halfW > 0) {
+        if (pos >= halfW) pos -= halfW;
+        if (pos < 0) pos += halfW;
+      }
       inner.style.transform = 'translateX(-' + pos + 'px)';
       requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
 
     // Mouse drag
     wrap.addEventListener('mousedown', function (e) {
