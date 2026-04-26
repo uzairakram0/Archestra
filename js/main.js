@@ -6,7 +6,7 @@
   else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     root.setAttribute('data-theme', 'dark');
   }
-  toggle.addEventListener('click', () => {
+  if (toggle) toggle.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     root.setAttribute('data-theme', next);
     localStorage.setItem('archestra-theme', next);
@@ -374,68 +374,76 @@
 
   // === QUOTES MARQUEE ===
   (function () {
-    var inner = document.querySelector('.quotes-inner');
-    var wrap = document.querySelector('.quotes-track-wrap');
-    if (!inner || !wrap) return;
+    function initMarquee() {
+      var inner = document.querySelector('.quotes-inner');
+      var wrap = document.querySelector('.quotes-track-wrap');
+      if (!inner || !wrap) return;
 
-    // Clone cards for seamless loop, track how many originals
-    var origCards = Array.from(inner.children);
-    var origCount = origCards.length;
-    origCards.forEach(function (card) {
-      var clone = card.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      inner.appendChild(clone);
-    });
+      var origCards = Array.from(inner.children);
+      var origCount = origCards.length;
+      origCards.forEach(function (card) {
+        var clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        inner.appendChild(clone);
+      });
 
-    var pos = 0;
-    var baseSpeed = 0.6;
-    var dragVel = 0;
-    var dragging = false;
-    var lastX = 0;
-    var halfW = 0;
+      var pos = 0;
+      var baseSpeed = 0.6;
+      var dragVel = 0;
+      var dragging = false;
+      var lastX = 0;
+      var halfW = 0;
 
-    // Measure exact start of clones after layout (avoids scrollWidth rounding issues)
-    requestAnimationFrame(function () {
-      var iRect = inner.getBoundingClientRect();
-      var cRect = inner.children[origCount].getBoundingClientRect();
-      halfW = cRect.left - iRect.left;
-      requestAnimationFrame(tick);
-    });
-
-    function tick() {
-      if (!dragging) dragVel *= 0.88;
-      pos += baseSpeed + dragVel;
-      if (halfW > 0) {
-        if (pos >= halfW) pos -= halfW;
-        if (pos < 0) pos += halfW;
+      function measureHalfW() {
+        // offsetLeft difference is reliable across all browsers/environments
+        var first = inner.children[0];
+        var clone = inner.children[origCount];
+        if (!first || !clone) return 0;
+        return clone.offsetLeft - first.offsetLeft;
       }
-      inner.style.transform = 'translateX(-' + pos + 'px)';
+
+      function tick() {
+        // Lazy-measure each frame until we get a non-zero value
+        if (!halfW) halfW = measureHalfW();
+        if (!dragging) dragVel *= 0.88;
+        pos += baseSpeed + dragVel;
+        if (halfW > 0) {
+          if (pos >= halfW) pos -= halfW;
+          if (pos < 0) pos += halfW;
+        }
+        inner.style.transform = 'translateX(-' + pos + 'px)';
+        requestAnimationFrame(tick);
+      }
       requestAnimationFrame(tick);
+
+      wrap.addEventListener('mousedown', function (e) {
+        dragging = true; lastX = e.clientX; dragVel = 0;
+        wrap.style.cursor = 'grabbing';
+      });
+      document.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - lastX;
+        pos -= dx; dragVel = -dx * 0.6; lastX = e.clientX;
+      });
+      document.addEventListener('mouseup', function () {
+        dragging = false; wrap.style.cursor = '';
+      });
+      wrap.addEventListener('touchstart', function (e) {
+        dragging = true; lastX = e.touches[0].clientX; dragVel = 0;
+      }, { passive: true });
+      wrap.addEventListener('touchmove', function (e) {
+        if (!dragging) return;
+        var dx = e.touches[0].clientX - lastX;
+        pos -= dx; dragVel = -dx * 0.6; lastX = e.touches[0].clientX;
+      }, { passive: true });
+      wrap.addEventListener('touchend', function () { dragging = false; }, { passive: true });
     }
 
-    // Mouse drag
-    wrap.addEventListener('mousedown', function (e) {
-      dragging = true; lastX = e.clientX; dragVel = 0;
-      wrap.style.cursor = 'grabbing';
-    });
-    document.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      var dx = e.clientX - lastX;
-      pos -= dx; dragVel = -dx * 0.6; lastX = e.clientX;
-    });
-    document.addEventListener('mouseup', function () {
-      dragging = false; wrap.style.cursor = '';
-    });
-
-    // Touch
-    wrap.addEventListener('touchstart', function (e) {
-      dragging = true; lastX = e.touches[0].clientX; dragVel = 0;
-    }, { passive: true });
-    wrap.addEventListener('touchmove', function (e) {
-      if (!dragging) return;
-      var dx = e.touches[0].clientX - lastX;
-      pos -= dx; dragVel = -dx * 0.6; lastX = e.touches[0].clientX;
-    }, { passive: true });
-    wrap.addEventListener('touchend', function () { dragging = false; }, { passive: true });
+    // Run after full page load so layout is guaranteed to be computed
+    if (document.readyState === 'complete') {
+      initMarquee();
+    } else {
+      window.addEventListener('load', initMarquee, { once: true });
+    }
   })();
 })();
