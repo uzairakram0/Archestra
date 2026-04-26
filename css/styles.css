@@ -725,20 +725,12 @@ section { padding: 120px 24px; position: relative; }
   overflow: hidden;
   padding: 8px 0 28px;
   user-select: none;
+  cursor: grab;
 }
 .quotes-inner {
   display: flex;
   gap: 28px;
-  animation: quotes-scroll 55s linear infinite;
   will-change: transform;
-}
-.quotes-track-wrap:hover .quotes-inner,
-.quotes-track-wrap.paused .quotes-inner {
-  animation-play-state: paused;
-}
-@keyframes quotes-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
 }
 
 .quote {
@@ -1606,7 +1598,7 @@ footer {
   .project.wide .project-body { max-width: 100%; }
   .project-body { padding: 1.5rem; }
 
-  .quote { flex: 0 0 88vw; }
+  .quote { flex: 0 0 85vw; }
   #clients .section-head { padding-left: 1.2rem; padding-right: 1.2rem; }
   .quotes-track-wrap::before, .quotes-track-wrap::after { width: 60px; }
 

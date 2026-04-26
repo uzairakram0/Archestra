@@ -378,16 +378,55 @@
     var wrap = document.querySelector('.quotes-track-wrap');
     if (!inner || !wrap) return;
 
-    // Duplicate cards for seamless infinite loop
-    var origCards = Array.from(inner.children);
-    origCards.forEach(function (card) {
+    // Duplicate cards for seamless loop
+    Array.from(inner.children).forEach(function (card) {
       var clone = card.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
       inner.appendChild(clone);
     });
 
-    // Pause on touch (mobile)
-    wrap.addEventListener('touchstart', function () { wrap.classList.add('paused'); }, { passive: true });
-    wrap.addEventListener('touchend', function () { wrap.classList.remove('paused'); }, { passive: true });
+    var pos = 0;
+    var baseSpeed = 0.6;
+    var dragVel = 0;
+    var dragging = false;
+    var lastX = 0;
+
+    function halfWidth() { return inner.scrollWidth / 2; }
+
+    function tick() {
+      if (!dragging) dragVel *= 0.88;
+      pos += baseSpeed + dragVel;
+      var half = halfWidth();
+      if (pos >= half) pos -= half;
+      if (pos < 0) pos += half;
+      inner.style.transform = 'translateX(-' + pos + 'px)';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // Mouse drag
+    wrap.addEventListener('mousedown', function (e) {
+      dragging = true; lastX = e.clientX; dragVel = 0;
+      wrap.style.cursor = 'grabbing';
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - lastX;
+      pos -= dx; dragVel = -dx * 0.6; lastX = e.clientX;
+    });
+    document.addEventListener('mouseup', function () {
+      dragging = false; wrap.style.cursor = '';
+    });
+
+    // Touch
+    wrap.addEventListener('touchstart', function (e) {
+      dragging = true; lastX = e.touches[0].clientX; dragVel = 0;
+    }, { passive: true });
+    wrap.addEventListener('touchmove', function (e) {
+      if (!dragging) return;
+      var dx = e.touches[0].clientX - lastX;
+      pos -= dx; dragVel = -dx * 0.6; lastX = e.touches[0].clientX;
+    }, { passive: true });
+    wrap.addEventListener('touchend', function () { dragging = false; }, { passive: true });
   })();
 })();
