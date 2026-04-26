@@ -1,0 +1,10 @@
+<svg viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    path, rect, circle { fill: #0071e3; }
+    @media (prefers-color-scheme: dark) {
+      path, rect, circle { fill: #2997ff; }
+    }
+  </style>
+  <rect x="4" y="1" width="10" height="22" rx="5" transform="rotate(25 9 12)" fill="#0071e3"/>
+  <circle cx="19" cy="19" r="4.5" fill="#0071e3"/>
+</svg>
