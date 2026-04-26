@@ -1486,23 +1486,38 @@ footer {
 
 .footer-bottom .legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
-.theme-toggle {
-  width: 30px; height: 30px;
-  border: 1px solid var(--line);
-  background: transparent;
+.theme-switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.4rem;
   color: var(--muted);
+}
+.theme-switch {
+  width: 42px;
+  height: 24px;
+  border-radius: 99px;
+  background: var(--line);
+  border: none;
   cursor: pointer;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  transition: all 0.2s;
+  position: relative;
+  padding: 0;
+  transition: background 0.25s;
   flex-shrink: 0;
 }
-.theme-toggle:hover { background: var(--bg-2); color: var(--ink); }
-.theme-toggle svg { width: 14px; height: 14px; }
-.theme-toggle .sun { display: none; }
-[data-theme="dark"] .theme-toggle .sun { display: block; }
-[data-theme="dark"] .theme-toggle .moon { display: none; }
+[data-theme="dark"] .theme-switch { background: var(--accent); }
+.switch-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+}
+[data-theme="dark"] .switch-thumb { transform: translateX(18px); }
 
 /* =================== ANIMATIONS =================== */
 .fade-up {
