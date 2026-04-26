@@ -4,22 +4,15 @@
   // === THEME ===
   const toggle = document.getElementById('themeToggle');
   const root = document.documentElement;
-  const saved = localStorage.getItem('archestra-theme');
-  if (saved) root.setAttribute('data-theme', saved);
-  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    root.setAttribute('data-theme', 'dark');
-  }
+
+  // Toggle is session-only — never saved, system preference always wins on refresh
   if (toggle) toggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('archestra-theme', next);
+    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
   });
 
-  // Follow system preference changes in real time (only when user hasn't manually toggled)
+  // Update live when system preference changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('archestra-theme')) {
-      root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
+    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
   });
 
   // === FADE-UP ===

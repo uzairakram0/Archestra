@@ -11,13 +11,12 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="stylesheet" href="css/styles.css">
 <script>
-  (function() {
-    var saved = localStorage.getItem('archestra-theme');
-    document.documentElement.setAttribute(
-      'data-theme',
-      saved ? saved : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    );
-  })();
+  // Always follow system preference — clear any stale manual override
+  localStorage.removeItem('archestra-theme');
+  document.documentElement.setAttribute(
+    'data-theme',
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  );
 </script>
 </head>
 <body>
