@@ -703,19 +703,43 @@ section { padding: 120px 24px; position: relative; }
   width: 100%;
   overflow: hidden;
 }
+.quotes-track-wrap::before,
+.quotes-track-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 180px;
+  z-index: 2;
+  pointer-events: none;
+}
+.quotes-track-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg) 20%, transparent 100%);
+}
+.quotes-track-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg) 20%, transparent 100%);
+}
 .quotes {
   display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 8px max(2rem, calc((100vw - 1120px) / 2)) 24px;
-  cursor: grab;
+  overflow: hidden;
+  padding: 8px 0 28px;
   user-select: none;
 }
-.quotes::-webkit-scrollbar { display: none; }
-.quotes.dragging { cursor: grabbing; scroll-snap-type: none; }
+.quotes-inner {
+  display: flex;
+  gap: 28px;
+  animation: quotes-scroll 55s linear infinite;
+  will-change: transform;
+}
+.quotes-track-wrap:hover .quotes-inner,
+.quotes-track-wrap.paused .quotes-inner {
+  animation-play-state: paused;
+}
+@keyframes quotes-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
 
 .quote {
   background: var(--card);
@@ -723,8 +747,7 @@ section { padding: 120px 24px; position: relative; }
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  flex: 0 0 380px;
-  scroll-snap-align: start;
+  flex: 0 0 400px;
 }
 
 .quote-text {
@@ -1585,7 +1608,7 @@ footer {
 
   .quote { flex: 0 0 88vw; }
   #clients .section-head { padding-left: 1.2rem; padding-right: 1.2rem; }
-  .quotes { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .quotes-track-wrap::before, .quotes-track-wrap::after { width: 60px; }
 
   .inquiry-card { padding: 2rem; border-radius: 20px; }
   .option-grid { grid-template-columns: 1fr; }

@@ -372,30 +372,22 @@
     }
   });
 
-  // === QUOTES DRAG SCROLL ===
+  // === QUOTES MARQUEE ===
   (function () {
-    var el = document.getElementById('quotesCarousel');
-    if (!el) return;
-    var startX, scrollLeft, dragging = false;
-    el.addEventListener('mousedown', function (e) {
-      dragging = true;
-      startX = e.pageX - el.offsetLeft;
-      scrollLeft = el.scrollLeft;
-      el.classList.add('dragging');
+    var inner = document.querySelector('.quotes-inner');
+    var wrap = document.querySelector('.quotes-track-wrap');
+    if (!inner || !wrap) return;
+
+    // Duplicate cards for seamless infinite loop
+    var origCards = Array.from(inner.children);
+    origCards.forEach(function (card) {
+      var clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      inner.appendChild(clone);
     });
-    document.addEventListener('mouseup', function () {
-      dragging = false;
-      el.classList.remove('dragging');
-    });
-    el.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      e.preventDefault();
-      var x = e.pageX - el.offsetLeft;
-      el.scrollLeft = scrollLeft - (x - startX) * 1.4;
-    });
-    el.addEventListener('mouseleave', function () {
-      dragging = false;
-      el.classList.remove('dragging');
-    });
+
+    // Pause on touch (mobile)
+    wrap.addEventListener('touchstart', function () { wrap.classList.add('paused'); }, { passive: true });
+    wrap.addEventListener('touchend', function () { wrap.classList.remove('paused'); }, { passive: true });
   })();
 })();
