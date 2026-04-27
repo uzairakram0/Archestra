@@ -82,6 +82,8 @@ nav {
   flex-shrink: 0;
   color: var(--accent);
 }
+[data-theme="dark"] .logo { color: #fff; }
+[data-theme="dark"] .logo-mark { color: #fff; }
 
 .nav-links {
   display: flex;
