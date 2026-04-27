@@ -48,6 +48,8 @@ body {
 
 ::selection { background: var(--accent); color: #fff; }
 
+a, button { touch-action: manipulation; }
+
 /* =================== NAV =================== */
 nav {
   position: fixed;
@@ -686,6 +688,7 @@ section { padding: 120px 24px; position: relative; }
   position: relative;
   width: 100%;
   overflow: hidden;
+  touch-action: pan-y;
 }
 .quotes-track-wrap::before,
 .quotes-track-wrap::after {
@@ -1569,8 +1572,10 @@ footer {
 
 /* =================== RESPONSIVE =================== */
 @media (max-width: 900px) {
-  nav { padding: 0 1rem; height: 48px; justify-content: flex-start; }
-  .nav-links a:not(.logo) { display: none; }
+  nav { padding: 0 1rem; height: 48px; justify-content: space-between; }
+  .nav-links { gap: 1.4rem; }
+  .nav-links a:not(.logo):not(.mobile-show) { display: none; }
+  .nav-links a.mobile-show { display: flex; font-size: 0.8rem; }
 
   section { padding: 80px 20px; }
 
@@ -1625,7 +1630,7 @@ footer {
 
   .quote { flex: 0 0 85vw; }
   #clients .section-head { padding-left: 1.2rem; padding-right: 1.2rem; }
-  .quotes-track-wrap::before, .quotes-track-wrap::after { width: 60px; }
+  .quotes-track-wrap::before, .quotes-track-wrap::after { display: none; }
 
   .inquiry-card { padding: 2rem; border-radius: 20px; }
   .option-grid { grid-template-columns: 1fr; }
