@@ -1,20 +1,6 @@
 ﻿  // === TWEMOJI ===
   if (typeof twemoji !== 'undefined') twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
 
-  // === ANCHOR LINK TOUCH FIX ===
-  // iOS Safari sometimes drops synthesized clicks on anchor links inside overflow:hidden/animated parents.
-  // This ensures all #id links scroll correctly on touch, accounting for the fixed nav height.
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener('touchend', function (e) {
-      var target = document.querySelector(link.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      var navH = document.querySelector('nav').offsetHeight || 60;
-      var top = target.getBoundingClientRect().top + window.scrollY - navH;
-      window.scrollTo({ top: top, behavior: 'smooth' });
-    }, { passive: false });
-  });
-
   // === THEME ===
   const toggle = document.getElementById('themeToggle');
   const root = document.documentElement;
@@ -236,11 +222,9 @@
         btn.classList.add('available');
         if (dt.getTime() === calNow.getTime()) btn.classList.add('today');
         if (state.data.schedDate === dateStr) btn.classList.add('selected');
-        btn.addEventListener('click', function () {
-          state.data.schedDate = dateStr;
-          buildCal();
-          validateStep();
-        });
+        function handleCalDay() { state.data.schedDate = dateStr; buildCal(); validateStep(); }
+        btn.addEventListener('click', handleCalDay);
+        btn.addEventListener('touchend', function(e) { e.preventDefault(); handleCalDay(); }, { passive: false });
       }
       grid.appendChild(btn);
     }
@@ -277,11 +261,9 @@
         btn.disabled = true;
       } else {
         btn.className = 'time-slot' + (state.data.schedTime === slot ? ' selected' : '');
-        btn.addEventListener('click', function () {
-          state.data.schedTime = slot;
-          buildTimeSlots();
-          validateStep();
-        });
+        function handleTimeSlot() { state.data.schedTime = slot; buildTimeSlots(); validateStep(); }
+        btn.addEventListener('click', handleTimeSlot);
+        btn.addEventListener('touchend', function(e) { e.preventDefault(); handleTimeSlot(); }, { passive: false });
       }
       grid.appendChild(btn);
     });
@@ -311,7 +293,7 @@
   }
 
   document.querySelectorAll('.option-card').forEach(card => {
-    card.addEventListener('click', () => {
+    function handleOptionCard() {
       const field  = card.dataset.field;
       const value  = card.dataset.value;
       const isMulti = card.dataset.multi === 'true';
@@ -326,7 +308,9 @@
         state.data[field] = value;
       }
       validateStep();
-    });
+    }
+    card.addEventListener('click', handleOptionCard);
+    card.addEventListener('touchend', function(e) { e.preventDefault(); handleOptionCard(); }, { passive: false });
   });
 
   ['name', 'email', 'phone', 'notes'].forEach(id => {

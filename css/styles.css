@@ -1610,6 +1610,7 @@ footer {
 
   .hero > *:not(#hero-3d) { position: static; z-index: auto; }
 
+  .hero { overflow: visible; }
   .transform-scene { padding: 60px 20px 80px; }
   .transform-stage { aspect-ratio: 4 / 3; border-radius: 16px; }
   .stage-canvas, .stage-frame { padding: 1.5rem; }
