@@ -1,6 +1,20 @@
 ﻿  // === TWEMOJI ===
   if (typeof twemoji !== 'undefined') twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
 
+  // === ANCHOR LINK TOUCH FIX ===
+  // iOS Safari sometimes drops synthesized clicks on anchor links inside overflow:hidden/animated parents.
+  // This ensures all #id links scroll correctly on touch, accounting for the fixed nav height.
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener('touchend', function (e) {
+      var target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      var navH = document.querySelector('nav').offsetHeight || 60;
+      var top = target.getBoundingClientRect().top + window.scrollY - navH;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }, { passive: false });
+  });
+
   // === THEME ===
   const toggle = document.getElementById('themeToggle');
   const root = document.documentElement;
@@ -320,7 +334,7 @@
     if (el) el.addEventListener('input', () => { state.data[id] = el.value; validateStep(); });
   });
 
-  nextBtn.addEventListener('click', () => {
+  function doNext() {
     if (nextBtn.disabled) return;
     if (state.step < state.totalSteps) {
       state.step++; updateUI();
@@ -333,16 +347,19 @@
       successPanel.classList.add('active');
       dots.forEach(d => { d.classList.remove('active'); d.classList.add('complete'); });
     }
-  });
-
-  backBtn.addEventListener('click', () => {
+  }
+  function doBack() {
     if (state.step === 4 && state.step4Sub > 1) {
       state.step4Sub--; updateStep4(); validateStep();
     } else if (state.step > 1) {
       if (state.step === 4) state.step4Sub = 1;
       state.step--; updateUI();
     }
-  });
+  }
+  nextBtn.addEventListener('click', doNext);
+  nextBtn.addEventListener('touchend', function (e) { e.preventDefault(); doNext(); }, { passive: false });
+  backBtn.addEventListener('click', doBack);
+  backBtn.addEventListener('touchend', function (e) { if (!backBtn.disabled) { e.preventDefault(); doBack(); } }, { passive: false });
 
   updateUI();
 
@@ -432,14 +449,23 @@
       document.addEventListener('mouseup', function () {
         dragging = false; wrap.style.cursor = '';
       });
+      var touchStartX = 0, touchStartY = 0;
       wrap.addEventListener('touchstart', function (e) {
-        dragging = true; lastX = e.touches[0].clientX; dragVel = 0;
+        touchStartX = lastX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        dragging = true; dragVel = 0;
       }, { passive: true });
       wrap.addEventListener('touchmove', function (e) {
         if (!dragging) return;
         var dx = e.touches[0].clientX - lastX;
-        pos -= dx; dragVel = -dx * 0.6; lastX = e.touches[0].clientX;
-      }, { passive: true });
+        var totalDx = Math.abs(e.touches[0].clientX - touchStartX);
+        var totalDy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (totalDx > totalDy) {
+          e.preventDefault(); // prevent page scroll on horizontal swipe
+          pos -= dx; dragVel = -dx * 0.6;
+        }
+        lastX = e.touches[0].clientX;
+      }, { passive: false });
       wrap.addEventListener('touchend', function () { dragging = false; }, { passive: true });
     }
 

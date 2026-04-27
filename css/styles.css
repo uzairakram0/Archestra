@@ -87,6 +87,8 @@ nav {
 [data-theme="dark"] .logo { color: #fff; text-shadow: 0 0 18px rgba(255,255,255,0.35); }
 [data-theme="dark"] .nav-links a.logo { color: #fff; text-shadow: 0 0 18px rgba(255,255,255,0.35); }
 [data-theme="dark"] .logo-mark { color: #fff; filter: drop-shadow(0 0 6px rgba(255,255,255,0.5)); }
+[data-theme="dark"] .nav-links a:not(.logo) { text-shadow: 0 0 10px rgba(41,151,255,0.22); }
+[data-theme="dark"] .nav-links a:not(.logo):hover { text-shadow: 0 0 14px rgba(41,151,255,0.55); }
 
 .nav-links {
   display: flex;
