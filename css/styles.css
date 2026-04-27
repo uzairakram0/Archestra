@@ -31,7 +31,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 60px; }
 
 body {
   background: var(--bg);
@@ -1611,6 +1611,7 @@ footer {
   .transform-scene { padding: 60px 20px 80px; }
   .transform-stage { aspect-ratio: 4 / 3; border-radius: 16px; }
   .stage-canvas, .stage-frame { padding: 1.5rem; }
+  .step-btn { min-height: 44px; padding: 0.75rem 1.2rem; }
 
   .tiles { grid-template-columns: 1fr; }
   .tile { padding: 32px; aspect-ratio: auto; min-height: 420px; }

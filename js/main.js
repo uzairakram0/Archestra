@@ -46,10 +46,15 @@
   }
 
   stageBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    function handleStageBtn() {
       stopAutoplay();
       setStage(parseInt(btn.dataset.stageBtn));
-    });
+    }
+    btn.addEventListener('click', handleStageBtn);
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      handleStageBtn();
+    }, { passive: false });
   });
 
   function startAutoplay() {
